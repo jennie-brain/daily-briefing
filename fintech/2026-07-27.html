@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>핀테크·토큰증권 뉴스 브리핑 - 2026.07.27</title>
+<style>
+  :root{
+    --bg:#f7f7f8;
+    --card:#ffffff;
+    --border:#e5e5ea;
+    --text:#1c1c1e;
+    --sub:#6b6b70;
+    --accent:#2f5bea;
+    --accent-bg:#eef1fd;
+    --warn-bg:#fff8e6;
+    --warn-border:#f0d999;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+    line-height:1.5;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:20px 16px 32px;
+  }
+  .page-title{
+    font-size:20px;
+    margin:0 0 6px;
+    font-weight:700;
+  }
+  .nav-header{margin:2px 0 14px;}
+  .screen-tabs{
+    display:flex;
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .screen-tab{
+    flex:1;
+    text-align:center;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--sub);
+    padding:7px 4px;
+    border-radius:8px;
+    background:var(--card);
+    border:1px solid var(--border);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:all 0.15s ease;
+  }
+  .screen-tab.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  .swipe-hint{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-align:center;
+    font-size:12px;
+    color:var(--sub);
+  }
+  .swipe-hint .kbd-hint{
+    color:var(--sub);
+    opacity:0.75;
+  }
+  .trend-summary{
+    background:var(--accent-bg);
+    border:1px solid #c9d6fb;
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .trend-summary-label{
+    font-size:13px;
+    font-weight:700;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+  .trend-summary-text{
+    font-size:14px;
+    color:var(--text);
+    line-height:1.6;
+    margin-top:10px;
+  }
+  .pager{
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+  }
+  .pager::-webkit-scrollbar{display:none;}
+  .screen{
+    flex:0 0 100%;
+    max-width:100%;
+    scroll-snap-align:start;
+  }
+  .dots{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin:14px 0 4px;
+  }
+  .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--border);
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+  .dot.active{background:var(--accent);width:18px;border-radius:4px;}
+  .screen-label{
+    font-size:13px;
+    font-weight:700;
+    color:var(--accent);
+    margin-bottom:4px;
+  }
+  .date{font-size:14px;color:var(--sub);margin-bottom:10px;}
+  .status-banner{
+    margin-top:10px;
+    padding:14px 16px;
+    border-radius:var(--radius);
+    background:var(--warn-bg);
+    border:1px solid var(--warn-border);
+    font-size:14px;
+    line-height:1.6;
+  }
+  .status-banner strong{
+    display:block;
+    font-size:15px;
+    margin-bottom:4px;
+  }
+  .status-banner.ok{
+    background:var(--accent-bg);
+    border-color:#c9d6fb;
+  }
+  .tabs{
+    display:flex;
+    gap:8px;
+    margin:18px 0 14px;
+  }
+  .tab-btn{
+    flex:1;
+    padding:12px 8px;
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    color:var(--sub);
+    text-align:center;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tab-btn.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .empty-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px 16px;
+    font-size:14.5px;
+    color:var(--sub);
+    text-align:center;
+  }
+  .section-label{
+    font-size:13px;
+    font-weight:700;
+    color:var(--sub);
+    margin:22px 0 10px;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+  }
+  .item{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    margin-bottom:10px;
+    overflow:hidden;
+  }
+  .item-head{
+    padding:14px 16px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .item-title{
+    font-size:15.5px;
+    font-weight:700;
+    line-height:1.4;
+  }
+  .item-summary{
+    font-size:13.5px;
+    color:var(--sub);
+    margin-top:4px;
+    line-height:1.5;
+  }
+  .chevron{
+    flex-shrink:0;
+    width:20px;
+    height:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--sub);
+    transition:transform 0.2s ease;
+    font-size:14px;
+  }
+  .item.open .chevron{transform:rotate(180deg);}
+  .item-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.25s ease;
+    border-top:1px solid transparent;
+  }
+  .item.open .item-body{
+    border-top:1px solid var(--border);
+  }
+  .item-body-inner{
+    padding:14px 16px 16px;
+    font-size:14px;
+  }
+  .why-label{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--accent);
+    margin-bottom:4px;
+  }
+  .why-text{
+    color:var(--text);
+    margin-bottom:12px;
+    line-height:1.55;
+  }
+  .status-tag{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:700;
+    padding:3px 8px;
+    border-radius:999px;
+    background:var(--accent-bg);
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+  a.source-link{
+    display:inline-block;
+    font-size:13.5px;
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:600;
+    padding:8px 12px;
+    background:var(--accent-bg);
+    border-radius:8px;
+    min-height:36px;
+    line-height:20px;
+  }
+  a.source-link:active{opacity:0.7;}
+  .trend-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:12px;
+  }
+  .trend-title{
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .topic-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:10px;
+  }
+  .topic-tag{
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--sub);
+    background:var(--bg);
+    border:1px solid var(--border);
+    padding:3px 9px;
+    border-radius:999px;
+  }
+  .trend-text{
+    font-size:14px;
+    color:var(--text);
+    line-height:1.6;
+    margin-bottom:12px;
+  }
+  .source-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .source-chip{
+    font-size:12.5px;
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:600;
+    padding:6px 10px;
+    background:var(--accent-bg);
+    border-radius:8px;
+  }
+  footer{
+    margin-top:20px;
+    font-size:12px;
+    color:var(--sub);
+    text-align:center;
+  }
+  .page-fab{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:50;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .page-fab:active{opacity:0.85;}
+  .page-menu{
+    position:fixed;
+    right:18px;
+    bottom:74px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.16);
+    overflow:hidden;
+    display:none;
+    z-index:50;
+    min-width:160px;
+  }
+  .page-menu.open{display:block;}
+  .page-menu button{
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:12px 16px;
+    border:none;
+    background:none;
+    font-size:14px;
+    font-weight:600;
+    color:var(--text);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .page-menu button+button{border-top:1px solid var(--border);}
+  .page-menu button.active{color:var(--accent);background:var(--accent-bg);}
+  .kbd-hint{display:none;}
+  .nav-arrow{
+    display:none;
+    position:fixed;
+    top:50%;
+    transform:translateY(-50%);
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--accent);
+    font-size:16px;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    z-index:40;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity 0.2s ease;
+  }
+  .nav-arrow.prev{left:20px;}
+  .nav-arrow.next{right:20px;}
+  .nav-arrow:disabled{opacity:0.3;cursor:default;}
+  @media (hover:hover) and (pointer:fine){
+    .kbd-hint{display:inline;}
+    .nav-arrow{display:flex;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1 class="page-title">핀테크 · 토큰증권(STO) 뉴스 브리핑</h1>
+  <div class="nav-header">
+    <div class="screen-tabs" id="screenTabs">
+      <span class="screen-tab active" data-i="0">① 오늘</span>
+      <span class="screen-tab" data-i="1">② 30일 트렌드</span>
+      <span class="screen-tab" data-i="2">③ 1년 트렌드</span>
+    </div>
+    <div class="swipe-hint">↔ 좌우로 스와이프해 넘겨보세요<span class="kbd-hint"> · ←/→ 키로도 이동</span></div>
+  </div>
+
+  <div class="pager" id="pager">
+
+    <!-- 화면 1: 오늘자 데일리 리포트 -->
+    <section class="screen">
+      <div class="screen-label">오늘 (Daily)</div>
+      <div class="date">리포트 날짜: 2026년 7월 27일</div>
+      <div class="status-banner">
+        <strong>토큰증권(STO)만 새 소식 있음 · 핀테크는 새 소식 없음</strong>
+        지난 24~48시간 내 핀테크 분야에서 새로 보도된 뉴스는 확인되지 않았습니다. 토큰증권(STO) 분야에서는 미래에셋의 코빗 인수 완료·"디지털 엑스(Digital X)" 출범 소식이 7월 26일 아침 재정리·보도되어 아래 탭에 반영했습니다. 하위법규·가이드라인의 "7월 중 발표" 예고는 오늘까지도 공식 발표가 확인되지 않았습니다.
+      </div>
+
+      <div class="tabs">
+        <div class="tab-btn active" data-tab="fintech">핀테크</div>
+        <div class="tab-btn" data-tab="sto">토큰증권(STO)</div>
+      </div>
+
+      <div class="panel active" id="panel-fintech">
+        <div class="empty-card">핀테크 분야: 최근 24~48시간 내 새로 보도된 뉴스·정책 변화가 확인되지 않았습니다.</div>
+      </div>
+
+      <div class="panel" id="panel-sto">
+        <div class="item">
+          <div class="item-head" onclick="toggleItem(this)">
+            <div>
+              <div class="item-title">미래에셋, 코빗 인수 완료…거래소명 '디지털 엑스(Digital X)'로 새 출발</div>
+              <div class="item-summary">미래에셋컨설팅이 가상자산 거래소 코빗 지분 97%대를 확보해 인수를 마무리하고, 사명을 '디지털 엑스'로 바꿔 재출범했습니다.</div>
+            </div>
+            <div class="chevron">▾</div>
+          </div>
+          <div class="item-body">
+            <div class="item-body-inner">
+              <div class="status-tag">인수완료 7/24 · 보도 7/26</div>
+              <div class="why-label">왜 중요한지</div>
+              <div class="why-text">금융그룹 계열사가 국내 가상자산 거래소를 인수한 첫 사례로, 박현주 미래에셋 GSO는 이를 '미래에셋 3.0'의 핵심축으로 규정했습니다. 향후 실물연계자산(RWA) 토큰화·토큰증권·스테이블코인을 결합한 사업 구상을 밝히고 있어, 토큰증권 하위법규 발표를 앞두고 대형 증권·자산운용사의 플랫폼 선점 경쟁이 한층 뚜렷해졌음을 보여주는 사례입니다.</div>
+              <a class="source-link" href="https://biz.heraldcorp.com/article/10818060" target="_blank" rel="noopener">헤럴드경제에서 보기 →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 화면 2: 최근 30일 트렌드 -->
+    <section class="screen">
+      <div class="screen-label">최근 30일 트렌드</div>
+      <div class="date">기준일: 2026년 7월 27일 (약 6월 27일 ~ 7월 27일)</div>
+
+      <div class="trend-summary">
+        <div class="trend-summary-label">이번 30일 핵심 키워드</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#토큰증권 하위법규</span>
+          <span class="topic-tag">#증권사 STO 선점전</span>
+          <span class="topic-tag">#코인원 대주주변경</span>
+          <span class="topic-tag">#빅테크 제도권 편입</span>
+          <span class="topic-tag">#51%룰 공방</span>
+        </div>
+        <div class="trend-summary-text">
+          이번 한 달은 토큰증권 하위법규 발표를 여전히 기다리는 가운데, 증권사들의 STO 플랫폼 선점 경쟁이 한층 격화됐습니다. 미래에셋이 코빗을 인수해 '디지털 엑스'로 재출범시켰고, 한국투자증권·삼성증권·신한투자증권 등도 저마다 다른 방식으로 디지털자산 인프라 구축에 나섰습니다. 가상자산 거래소 코인원은 한국투자증권·OKX벤처스를 새 대주주로 맞아 전통금융-가상자산 결합 사례를 하나 더 추가했고, 토스·카카오페이증권 등 빅테크 핀테크사의 제도권 편입도 계속됐습니다. 스테이블코인 발행 주체를 은행 중심으로 제한하는 '51%룰'을 둘러싼 여당과 한국은행의 이견은 이번 달에도 해소되지 않은 채 9월 통합 법안 발의 목표만 재확인됐습니다. 해외에서는 미국 GENIUS Act 세부규칙 마감(7/18)을 규제기관이 지키지 못한 채 스테이블코인 불확실성이 이어졌고, 서클의 은행 인가 획득과 삼성전자의 삼성월렛 스테이블코인 지원 발표, DTCC의 토큰화 국채·ETF 실거래 등 토큰화 인프라 투자는 계속 확대됐습니다.
+        </div>
+      </div>
+
+      <div class="tab-group">
+      <div class="tabs">
+        <div class="tab-btn active" data-panel="panel-30-domestic">국내</div>
+        <div class="tab-btn" data-panel="panel-30-global">해외</div>
+      </div>
+
+      <div class="panel active" id="panel-30-domestic">
+      <div class="trend-card">
+        <div class="trend-title">토큰증권 하위법규·가이드라인, "7월 발표" 예고가 발표 없이 마무리 임박</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#토큰증권</span>
+          <span class="topic-tag">#하위법규</span>
+          <span class="topic-tag">#풀링</span>
+        </div>
+        <div class="trend-text">
+          금융위원회는 조각투자 발행 모범규준·가이드라인을 7월 중 발표하겠다고 예고했고, 여러 기초자산을 묶는 '풀링' 허용 범위와 장외거래소 거래한도 확대가 핵심 쟁점으로 계속 논의됐습니다. 7월 27일 현재까지 공식 발표는 확인되지 않아, 이달 안에 발표될지 여전히 최대 관전 포인트로 남아 있습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.sedaily.com/article/20044533" target="_blank" rel="noopener">서울경제</a>
+          <a class="source-chip" href="https://www.etoday.co.kr/news/view/2584902" target="_blank" rel="noopener">이투데이</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">증권사 STO 플랫폼 선점전 본격화…미래에셋 '디지털 엑스' 출범</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#미래에셋</span>
+          <span class="topic-tag">#DigitalX</span>
+          <span class="topic-tag">#STO플랫폼</span>
+        </div>
+        <div class="trend-text">
+          내년 2월 토큰증권 법제화 시행을 앞두고 증권사들이 저마다 다른 방식으로 플랫폼 구축에 속도를 내고 있습니다. 미래에셋컨설팅은 7월 24일 코빗 지분 97%대를 확보해 인수를 마무리하고 '디지털 엑스'로 재출범시켰고, 한국투자증권은 단독 발행 플랫폼을, 신한투자증권은 SK증권·LS증권이 참여하는 네트워크 '펄스(PULSE)'를, 코스콤은 교보·다올·우리투자증권과 공동 플랫폼을 각각 추진 중입니다. 다만 비금전신탁 관련 법안이 국회에 계류돼 있어 실제 출시 가능한 상품은 투자계약증권으로 제한된 상태입니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://newsway.co.kr/news/view?ud=2026072415384520608" target="_blank" rel="noopener">뉴스웨이 7/26</a>
+          <a class="source-chip" href="https://biz.heraldcorp.com/article/10818060" target="_blank" rel="noopener">헤럴드경제</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">코인원, 대주주 변경 완료…한투·OKX벤처스 체제로 재편</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#코인원</span>
+          <span class="topic-tag">#대주주변경</span>
+          <span class="topic-tag">#한국투자증권</span>
+        </div>
+        <div class="trend-text">
+          금융정보분석원(FIU)은 7월 22일 가상자산 거래소 코인원의 대주주 변경 신고를 수리했습니다. 한국투자증권과 OKX벤처스가 각각 지분 20%씩을 확보해 컴투스홀딩스(24.54%)에 이은 공동 3대 주주로 올라섰고, 전통 증권사·글로벌 거래소·국내 거래소가 한데 묶인 새로운 협력 구도가 만들어졌습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.blockmedia.co.kr/archives/1119934" target="_blank" rel="noopener">블록미디어</a>
+          <a class="source-chip" href="https://www.news1.kr/finance/blockchain-fintech/6236896" target="_blank" rel="noopener">뉴스1</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">빅테크 핀테크사, 제도권 지위 한 단계 강화</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#토스</span>
+          <span class="topic-tag">#카카오페이증권</span>
+          <span class="topic-tag">#금융복합기업집단</span>
+        </div>
+        <div class="trend-text">
+          금융위원회는 7월 15일 토스그룹(자산 41조3000억원)을 2026년도 금융복합기업집단으로 지정했습니다. 빅테크 금융그룹이 이 지정을 받은 것은 처음으로, 앞으로 자본 적정성·내부거래 위험 등에 대한 그룹 단위 감독을 받게 됩니다. 앞서 7월 1일에는 카카오페이증권이 투자매매업 인가를 취득해 중개를 넘어 증권 직접 인수·판매와 IPO 주관 업무로 사업 영역을 넓혔습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://view.asiae.co.kr/article/2026071517430298859" target="_blank" rel="noopener">아시아경제 7/15</a>
+          <a class="source-chip" href="https://www.newspim.com/news/view/20260713000482" target="_blank" rel="noopener">뉴스핌 7/13</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">스테이블코인 '51%룰' 공방 지속…9월 통합 발의 목표만 재확인</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#51%룰</span>
+          <span class="topic-tag">#디지털자산기본법</span>
+          <span class="topic-tag">#스테이블코인</span>
+        </div>
+        <div class="trend-text">
+          한국은행은 원화 스테이블코인 발행 주체를 은행이 51% 이상 지분을 가진 컨소시엄으로 제한하자는 입장이지만, 여당인 더불어민주당은 이 방안이 혁신을 저해한다며 반대 입장을 유지하고 있습니다. 금융위원회는 비은행권(핀테크·블록체인 기업 포함)에도 발행을 개방하는 대안을 준비 중인 것으로 알려졌고, 여당은 8월 전당대회 이후 태스크포스를 재가동해 9월 중 디지털자산기본법 통합 발의를 목표로 하고 있지만 이달에도 이견은 해소되지 않았습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.ccn.com/news/crypto/fintech-stablecoins-south-korea-51-rule/" target="_blank" rel="noopener">CCN</a>
+          <a class="source-chip" href="https://www.cryptotimes.io/2026/07/20/south-korea-targets-september-for-won-stablecoin-bill-vows-fortnightly-reviews/" target="_blank" rel="noopener">Crypto Times 7/20</a>
+        </div>
+      </div>
+      </div>
+
+      <div class="panel" id="panel-30-global">
+      <div class="trend-card">
+        <div class="trend-title">GENIUS Act 시행규칙 마감(7/18) 놓쳐…미국 스테이블코인 규제 공백 지속</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#GENIUSAct</span>
+          <span class="topic-tag">#스테이블코인규제</span>
+          <span class="topic-tag">#미국</span>
+        </div>
+        <div class="trend-text">
+          미국 연방 규제기관들은 지난해 제정된 GENIUS Act의 세부 시행규칙을 1년 시한인 7월 18일까지 확정하지 못했습니다. 재무부·OCC·FDIC 등 6개 기관의 규칙안이 모두 초안 단계에 머물렀고, 법 자체는 늦어도 2027년 1월 18일 발효되지만 실무 규칙은 여전히 불확실한 상태입니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://stablecoininsider.org/the-genius-act-july-18-rulemaking-deadline-has-arrived-the-rules-are-not-ready/" target="_blank" rel="noopener">GENIUS Act 시한 경과, 규칙 미완성</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">서클(Circle), 미국 은행 인가 획득…USDC 거래량은 사상 최대</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#Circle</span>
+          <span class="topic-tag">#USDC</span>
+          <span class="topic-tag">#은행인가</span>
+        </div>
+        <div class="trend-text">
+          USDC 발행사 서클은 7월 8일 OCC로부터 신탁은행 인가를 획득해 연방 은행 인가를 받은 최초의 스테이블코인 발행사가 됐습니다. 같은 달 USDC의 조정 거래량은 6월 기준 1조7,900억 달러로 사상 최대치를 기록하며 테더(USDT)와의 점유율 격차를 벌렸습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.bloomberg.com/news/articles/2026-07-10/stablecoin-firm-circle-gets-approval-for-coveted-us-bank-charter" target="_blank" rel="noopener">서클 은행 인가 획득</a>
+          <a class="source-chip" href="https://www.coindesk.com/business/2026/07/06/circle-s-usdc-is-leaving-tether-behind-in-the-stablecoin-volume-race" target="_blank" rel="noopener">USDC 거래량 사상 최대</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">삼성전자, 삼성월렛에 스테이블코인 지원 발표…빅테크 채택 확산</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#삼성월렛</span>
+          <span class="topic-tag">#USDC</span>
+          <span class="topic-tag">#빅테크</span>
+        </div>
+        <div class="trend-text">
+          삼성전자는 7월 22일 갤럭시 언팩 행사에서 삼성월렛에 USDC 등 스테이블코인을 지원하는 기능을 추가하겠다고 밝혔습니다. 송금·결제·충전 화면을 시연했지만 구체적 파트너사나 출시 일정은 아직 확정하지 않았으며, 주요 스마트폰 제조사 가운데 처음으로 네이티브 스테이블코인 기능을 도입하는 사례로 주목받고 있습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://decrypt.co/374324/samsung-wallet-stablecoin-support-usdc" target="_blank" rel="noopener">삼성월렛 스테이블코인 지원</a>
+          <a class="source-chip" href="https://news.bitcoin.com/samsung-wallet-adds-native-stablecoin-support-in-a-major-leap-for-mainstream-crypto-adoption/" target="_blank" rel="noopener">관련 보도</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">DTCC, 블랙록·JP모간·골드만과 토큰화 국채·ETF 실거래 진행</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#DTCC</span>
+          <span class="topic-tag">#토큰화</span>
+          <span class="topic-tag">#RWA</span>
+        </div>
+        <div class="trend-text">
+          미국 예탁결제기관 DTCC는 7월 15일 블랙록·JP모간·골드만삭스와 함께 QQQ·SPY·미국 국채의 토큰화 실거래를 진행했으며, 오는 10월 상업적 정식 출시를 목표로 하고 있습니다. 미국·영국이 국경 간 스테이블코인·토큰화 자산 거래를 위한 공동 로드맵을 발표하는 등, 전통 금융권의 토큰화 인프라 투자가 국가 간 협력 단계로 확산되고 있습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://fnality.com/news/global-regulation-of-stablecoins-and-tokenized-deposits-remains-fragmented-in-2026" target="_blank" rel="noopener">글로벌 스테이블코인·토큰화 규제 현황</a>
+          <a class="source-chip" href="https://www.ccn.com/news/crypto/us-uk-stablecoin-tokenization-roadmap/" target="_blank" rel="noopener">US-UK 로드맵</a>
+        </div>
+      </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 화면 3: 최근 1년 트렌드 -->
+    <section class="screen">
+      <div class="screen-label">최근 1년 트렌드</div>
+      <div class="date">기준일: 2026년 7월 27일 (2025.7 ~ 2026.7)</div>
+
+      <div class="trend-summary">
+        <div class="trend-summary-label">지난 1년 핵심 키워드</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#토큰증권 법제화</span>
+          <span class="topic-tag">#KDX vs NXT</span>
+          <span class="topic-tag">#디지털자산기본법</span>
+          <span class="topic-tag">#빅테크 제도권 편입</span>
+          <span class="topic-tag">#핀테크 투자회복</span>
+        </div>
+        <div class="trend-summary-text">
+          지난 1년의 최대 사건은 전자증권법·자본시장법 개정으로 토큰증권의 법적 기반이 완성된 것입니다. 장외거래소 예비인가를 둘러싼 KDX·NXT 경쟁이 본격화된 반면, 디지털자산기본법은 1년 가까이 입법이 지연되다 최근에야 9월 발의 목표가 재확인됐고, 스테이블코인 발행 주체를 둘러싼 '51%룰' 공방은 여전히 진행 중입니다. 같은 기간 토스의 금융복합기업집단 지정, 카카오페이증권의 투자매매업 인가에 이어 최근에는 미래에셋의 코빗 인수·'디지털 엑스' 출범과 코인원의 한투·OKX벤처스 대주주 영입까지 이어지며, 전통 금융과 가상자산 업계의 결합이 한 해 내내 가속화됐습니다. 해외에서는 미국 GENIUS Act 제정(2025.7)을 계기로 스테이블코인 경쟁 구도가 재편됐고, 나스닥·NYSE가 토큰화 증권 플랫폼을 추진하며 온체인 RWA 시장이 400% 넘게 성장했습니다.
+        </div>
+      </div>
+
+      <div class="tab-group">
+      <div class="tabs">
+        <div class="tab-btn active" data-panel="panel-365-domestic">국내</div>
+        <div class="tab-btn" data-panel="panel-365-global">해외</div>
+      </div>
+
+      <div class="panel active" id="panel-365-domestic">
+      <div class="trend-card">
+        <div class="trend-title">토큰증권 법적 기반 완성…법제화는 끝, 이제는 시행 준비 단계</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#토큰증권</span>
+          <span class="topic-tag">#법제화</span>
+          <span class="topic-tag">#전자증권법</span>
+        </div>
+        <div class="trend-text">
+          지난 1년의 가장 큰 사건은 2026년 1월 15일 전자증권법·자본시장법 개정안의 국회 본회의 통과입니다(2월 3일 공포). 분산원장을 활용한 '토큰증권' 발행·유통 인프라가 전자증권법 체계 안에 도입되고, 투자계약증권을 증권사가 유통할 수 있는 근거도 자본시장법에 마련됐습니다. 시행은 2027년 2월 4일로 예정돼 있어, 2026년 하반기는 하위법규·가이드라인·인프라를 준비하는 마지막 구간에 해당합니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.seoul.co.kr/news/economy/finance/2026/01/15/20260115500181" target="_blank" rel="noopener">서울신문</a>
+          <a class="source-chip" href="https://www.kimchang.com/ko/insights/detail.kc?sch_section=4&idx=34390" target="_blank" rel="noopener">김·장 법률사무소</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">STO 장외거래소 예비인가 2파전…KDX·NXT 경쟁, 본인가 심사로 이어져</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#KDX</span>
+          <span class="topic-tag">#NXT</span>
+          <span class="topic-tag">#인프라경쟁</span>
+        </div>
+        <div class="trend-text">
+          법제화 이후 지난 1년간 조각투자 장외거래소 사업자 선정을 놓고 한국거래소·코스콤 주도의 'KDX'와 넥스트레이드·뮤직카우 주도의 'NXT' 2파전이 뚜렷해졌습니다. 외부평가위원회 심사에서 NXT가 750점, KDX가 725점을 받아 지난 2월 나란히 예비인가를 받았고, 두 컨소시엄 모두 6개월 내 조건을 충족한 뒤 본인가를 신청해야 하는 절차가 진행 중입니다. 이 사이 미래에셋·한국투자증권·신한투자증권 등도 각자 플랫폼 구축에 나서며 STO 인프라 경쟁이 더 다변화됐습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.etoday.co.kr/news/view/2556759" target="_blank" rel="noopener">이투데이</a>
+          <a class="source-chip" href="https://www.hankyung.com/article/2026021348816" target="_blank" rel="noopener">한국경제</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">디지털자산기본법 1년 표류…51%룰 공방 속 9월 발의 목표로 물꼬</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#디지털자산기본법</span>
+          <span class="topic-tag">#스테이블코인</span>
+          <span class="topic-tag">#51%룰</span>
+        </div>
+        <div class="trend-text">
+          스테이블코인 제도화를 담을 디지털자산기본법은 올해 1분기 입법을 목표로 했으나 계속 지연됐고, 발행 주체를 은행 51% 지분 컨소시엄으로 제한할지를 둘러싼 한국은행과 여당·금융위 사이의 이견도 1년 내내 좁혀지지 않았습니다. "곧 나온다"만 반복되던 흐름은 최근 9월 여당 통합 발의 계획과, 카카오·토스가 서클과 맺은 스테이블코인 MOU라는 실질적 진전으로 이어지고 있지만, 51%룰 자체는 여전히 미해결 쟁점으로 남아 있습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.koreatimes.co.kr/economy/policy/20251223/explainer-what-is-51-rule-bank-led-stablecoin-plan-stalls-koreas-digital-asset-legislation" target="_blank" rel="noopener">코리아타임스</a>
+          <a class="source-chip" href="https://www.cryptotimes.io/2026/07/20/south-korea-targets-september-for-won-stablecoin-bill-vows-fortnightly-reviews/" target="_blank" rel="noopener">Crypto Times 7/20</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">빅테크·전통금융의 디지털자산 제도권 편입 가속</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#토스</span>
+          <span class="topic-tag">#카카오페이증권</span>
+          <span class="topic-tag">#디지털엑스</span>
+        </div>
+        <div class="trend-text">
+          지난 1년간 빅테크·전통 금융권의 디지털자산 제도권 편입이 뚜렷해졌습니다. 토스그룹은 빅테크 최초로 금융복합기업집단에 지정돼 그룹 단위 감독을 받게 됐고, 카카오페이증권은 투자매매업 인가를 받아 IPO 주관 업무까지 영역을 넓혔습니다. 최근에는 미래에셋이 가상자산 거래소 코빗을 인수해 '디지털 엑스'로 재출범시켰고, 코인원 역시 한국투자증권·OKX벤처스를 새 대주주로 맞이하는 등, 증권사와 가상자산 거래소의 결합 사례가 한 해 사이 눈에 띄게 늘었습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://view.asiae.co.kr/article/2026071517430298859" target="_blank" rel="noopener">아시아경제 7/15</a>
+          <a class="source-chip" href="https://biz.heraldcorp.com/article/10818060" target="_blank" rel="noopener">헤럴드경제</a>
+          <a class="source-chip" href="https://www.blockmedia.co.kr/archives/1119934" target="_blank" rel="noopener">블록미디어</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">간편결제 100조원 돌파, 핀테크 투자도 대형딜 중심으로 회복</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#간편결제</span>
+          <span class="topic-tag">#100조원</span>
+          <span class="topic-tag">#스타트업투자</span>
+        </div>
+        <div class="trend-text">
+          네이버페이·카카오페이·토스페이의 연간 간편결제 금액이 2021년 50조 6000억원에서 2025년 약 106조 3000억원으로 4년 만에 두 배 넘게 성장하며 100조원 시대를 열었습니다. 같은 기간 국내 스타트업 투자액도 2026년 상반기 7조 8005억원을 기록해 2025년 연간 실적(6조 9358억원)을 반년 만에 넘어섰는데, 건수는 오히려 5.4% 줄어든 반면 금액은 204.7% 급증해 소수의 대형 딜에 자금이 쏠리는 흐름이 뚜렷했습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.dt.co.kr/article/12065360" target="_blank" rel="noopener">디지털타임스</a>
+          <a class="source-chip" href="https://platum.kr/archives/290277" target="_blank" rel="noopener">플래텀</a>
+        </div>
+      </div>
+      </div>
+
+      <div class="panel" id="panel-365-global">
+      <div class="trend-card">
+        <div class="trend-title">미국 GENIUS Act 제정 1년…스테이블코인 최초 연방법, 세부규칙은 여전히 미완성</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#GENIUSAct</span>
+          <span class="topic-tag">#스테이블코인법</span>
+          <span class="topic-tag">#미국</span>
+        </div>
+        <div class="trend-text">
+          2025년 7월 18일 미국 최초의 연방 스테이블코인법인 GENIUS Act가 제정되며 스테이블코인 제도화의 글로벌 기준점이 됐습니다. 그러나 1년이 지난 2026년 7월 18일 세부 시행규칙 확정 시한을 규제기관들이 지키지 못했고, 법 시행(2027년 1월 예정) 전까지 실무 규칙을 둘러싼 불확실성이 이어지고 있습니다. 이 사이 서클은 연방 은행 인가를 획득하고, 삼성전자 등 빅테크까지 스테이블코인 시장에 잇달아 뛰어들며 경쟁 구도가 크게 재편됐습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://stablecoininsider.org/the-genius-act-july-18-rulemaking-deadline-has-arrived-the-rules-are-not-ready/" target="_blank" rel="noopener">GENIUS Act 1년, 규칙 미완성</a>
+          <a class="source-chip" href="https://www.bloomberg.com/news/articles/2026-07-10/stablecoin-firm-circle-gets-approval-for-coveted-us-bank-charter" target="_blank" rel="noopener">서클 은행 인가</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">나스닥·NYSE, 토큰화 증권 플랫폼 경쟁…온체인 RWA 400% 성장</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#나스닥</span>
+          <span class="topic-tag">#NYSE</span>
+          <span class="topic-tag">#RWA토큰화</span>
+        </div>
+        <div class="trend-text">
+          나스닥은 3월 18일 SEC로부터 토큰화 증권 거래 플랫폼을 승인받았고, NYSE도 1월 별도의 토큰화 증권 거래 플랫폼 개발 계획을 발표하며 두 거래소 간 경쟁이 본격화됐습니다. 이 흐름 속에 DTCC가 블랙록·JP모간·골드만과 토큰화 국채·ETF 실거래에 나서는 등 대형 금융기관의 참여가 확대됐고, 온체인 실물자산(RWA) 토큰화 시가총액은 2025년 1월 이후 400% 넘게 성장해 2026년 7월 기준 310억 달러에 달했습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://www.coindesk.com/policy/2026/03/18/sec-approves-nasdaq-s-move-to-allow-tokenized-securities-trading" target="_blank" rel="noopener">나스닥 토큰화 증권 승인</a>
+          <a class="source-chip" href="https://www.mfdf.org/home/news---resources/news/2026/01/27/nyse-announces-platform-to-trade-tokenized-securities" target="_blank" rel="noopener">NYSE 토큰화 플랫폼 발표</a>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-title">글로벌 핀테크 투자, 대형 딜 중심으로 회복…빅테크의 스테이블코인 진입도 확산</div>
+        <div class="topic-tags">
+          <span class="topic-tag">#핀테크투자</span>
+          <span class="topic-tag">#메가딜</span>
+          <span class="topic-tag">#빅테크스테이블코인</span>
+        </div>
+        <div class="trend-text">
+          2026년 상반기 전 세계 핀테크 벤처 투자액은 286억 달러로 전년 동기 대비 23% 늘었지만, 거래 건수는 1,605건으로 25.7% 줄어 소수의 검증된 기업에 자금이 쏠리는 흐름이 1년 내내 이어졌습니다. 같은 기간 삼성전자 등 비금융 빅테크와 전통 자산운용사까지 스테이블코인 발행·지원에 나서면서, 스테이블코인이 결제·자산관리 서비스의 기본 구성요소로 자리잡는 흐름이 뚜렷해졌습니다.
+        </div>
+        <div class="source-row">
+          <a class="source-chip" href="https://news.crunchbase.com/fintech/funding-rises-deals-slump-h1-2026/" target="_blank" rel="noopener">H1 2026 핀테크 펀딩 +23%</a>
+          <a class="source-chip" href="https://decrypt.co/374324/samsung-wallet-stablecoin-support-usdc" target="_blank" rel="noopener">삼성월렛 스테이블코인 지원</a>
+        </div>
+      </div>
+      </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="dots">
+    <span class="dot active" data-i="0"></span>
+    <span class="dot" data-i="1"></span>
+    <span class="dot" data-i="2"></span>
+  </div>
+
+  <button class="nav-arrow prev" id="navPrev" aria-label="이전 화면" title="이전 화면 (←)" onclick="gotoScreen(currentScreenIndex()-1)">‹</button>
+  <button class="nav-arrow next" id="navNext" aria-label="다음 화면" title="다음 화면 (→)" onclick="gotoScreen(currentScreenIndex()+1)">›</button>
+
+  <button class="page-fab" id="pageFab" aria-label="페이지 선택" onclick="togglePageMenu()">☰</button>
+  <div class="page-menu" id="pageMenu">
+    <button class="active" data-i="0" onclick="gotoScreen(0)">① 오늘</button>
+    <button data-i="1" onclick="gotoScreen(1)">② 30일 트렌드</button>
+    <button data-i="2" onclick="gotoScreen(2)">③ 1년 트렌드</button>
+  </div>
+
+  <footer>
+    본 리포트는 자동 생성되었습니다. 새로운 확정 뉴스가 없는 날에는 진행 중인 사안만 참고용으로 표시됩니다. 30일/1년 페이지는 매 실행 시점 기준으로 새로 조사한 트렌드 요약입니다.
+  </footer>
+
+</div>
+
+<script>
+  function toggleItem(headEl){
+    var item = headEl.parentElement;
+    item.classList.toggle('open');
+    var body = item.querySelector('.item-body');
+    if(item.classList.contains('open')){
+      body.style.maxHeight = body.scrollHeight + 'px';
+    } else {
+      body.style.maxHeight = 0;
+    }
+  }
+
+  document.querySelectorAll('.tabs').forEach(function(tabsEl){
+    // 화면1(오늘)은 .tab-group 없이 section 바로 아래, 화면2/3(트렌드)은 .tab-group으로 감싸여 있음
+    var container = tabsEl.closest('.tab-group') || tabsEl.closest('section');
+    var btns = tabsEl.querySelectorAll('.tab-btn');
+    var panels = container.querySelectorAll(':scope > .panel');
+    btns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        btns.forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        panels.forEach(function(p){ p.classList.remove('active'); });
+        var targetId = btn.dataset.panel || ('panel-' + btn.dataset.tab);
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+  });
+
+  var pager = document.getElementById('pager');
+  var dots = document.querySelectorAll('.dot');
+  var pageMenuBtns = document.querySelectorAll('#pageMenu button');
+  var screenTabs = document.querySelectorAll('.screen-tab');
+  var navPrev = document.getElementById('navPrev');
+  var navNext = document.getElementById('navNext');
+  var SCREEN_COUNT = 3;
+
+  function currentScreenIndex(){
+    return Math.round(pager.scrollLeft / pager.clientWidth);
+  }
+
+  function syncIndicators(){
+    var idx = currentScreenIndex();
+    dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+    pageMenuBtns.forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+    screenTabs.forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+    if(navPrev) navPrev.disabled = idx === 0;
+    if(navNext) navNext.disabled = idx === SCREEN_COUNT - 1;
+  }
+  pager.addEventListener('scroll', syncIndicators);
+
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      gotoScreen(parseInt(d.dataset.i, 10));
+    });
+  });
+
+  screenTabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      gotoScreen(parseInt(t.dataset.i, 10));
+    });
+  });
+
+  function gotoScreen(i){
+    i = Math.max(0, Math.min(SCREEN_COUNT - 1, i));
+    pager.scrollTo({left: i * pager.clientWidth, behavior:'smooth'});
+    document.getElementById('pageMenu').classList.remove('open');
+  }
+
+  function togglePageMenu(){
+    document.getElementById('pageMenu').classList.toggle('open');
+  }
+
+  document.addEventListener('click', function(e){
+    var menu = document.getElementById('pageMenu');
+    var fab = document.getElementById('pageFab');
+    if(menu.classList.contains('open') && !menu.contains(e.target) && e.target !== fab){
+      menu.classList.remove('open');
+    }
+  });
+
+  // 방향키로 화면 전환 (←/→)
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight'){ gotoScreen(currentScreenIndex() + 1); }
+    else if(e.key === 'ArrowLeft'){ gotoScreen(currentScreenIndex() - 1); }
+  });
+
+  syncIndicators();
+</script>
+
+</body>
+</html>
