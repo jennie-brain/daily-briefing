@@ -2,22 +2,27 @@
 """Regenerates fintech/index.html, security/index.html, and the root index.html
 from the dated *.html briefing files sitting in each topic folder.
 
+Each topic page loads the latest day's briefing directly (in an iframe) and
+offers a native date picker to jump to any older date without leaving the
+page. Older files are never deleted — the date picker can reach all of them,
+they're just not listed out on screen.
+
 Run after adding new dated files:
     python scripts/generate_index.py
 """
 
+import json
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-RECENT_COUNT = 7
 
 TOPICS = [
     {"key": "fintech", "dir": "fintech", "title": "핀테크·토큰증권 뉴스 브리핑", "emoji": "💳"},
     {"key": "security", "dir": "security", "title": "정보보안 뉴스 브리핑", "emoji": "🔐"},
 ]
 
-STYLE = """
+ROOT_STYLE = """
   :root{
     --bg:#f7f7f8;
     --card:#ffffff;
@@ -41,19 +46,6 @@ STYLE = """
   .page-title{font-size:20px;margin:0 0 6px;font-weight:700;}
   .sub{color:var(--sub);font-size:13px;margin:0 0 20px;}
   a{color:inherit;text-decoration:none;}
-  .back{display:inline-block;margin-bottom:14px;color:var(--accent);font-size:13px;font-weight:600;}
-  .section-label{font-size:13px;font-weight:700;color:var(--sub);margin:22px 0 8px;text-transform:uppercase;letter-spacing:.03em;}
-  .card{
-    display:block;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:14px 16px;
-    margin-bottom:10px;
-  }
-  .card:hover{border-color:var(--accent);}
-  .card .date{font-weight:700;font-size:15px;}
-  .card .rel{color:var(--sub);font-size:12px;margin-top:2px;}
   .topic-card{
     display:block;
     background:var(--card);
@@ -85,20 +77,9 @@ def list_dated_files(directory: Path):
 def build_topic_index(topic: dict) -> str:
     directory = ROOT / topic["dir"]
     dates = list_dated_files(directory)
-    recent = dates[:RECENT_COUNT]
-    # Dates beyond RECENT_COUNT stay in the folder (never deleted) but are
-    # intentionally not linked here, per request to only show the latest week.
-
-    card_blocks = []
-    for i, d in enumerate(recent):
-        rel_tag = '<div class="rel">최신</div>' if i == 0 else ""
-        card_blocks.append(
-            f'      <a class="card" href="./{d}.html">\n'
-            f'        <div class="date">{format_date(d)}</div>\n'
-            f'        {rel_tag}\n'
-            f"      </a>"
-        )
-    recent_html = "\n".join(card_blocks)
+    latest = dates[0] if dates else None
+    earliest = dates[-1] if dates else None
+    available_json = json.dumps(dates)
 
     return f"""<!DOCTYPE html>
 <html lang="ko">
@@ -106,16 +87,95 @@ def build_topic_index(topic: dict) -> str:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>{topic['title']}</title>
-<style>{STYLE}</style>
+<style>
+  :root{{
+    --bg:#f7f7f8;
+    --card:#ffffff;
+    --border:#e5e5ea;
+    --text:#1c1c1e;
+    --sub:#6b6b70;
+    --accent:#2f5bea;
+  }}
+  *{{box-sizing:border-box;}}
+  html,body{{height:100%;margin:0;}}
+  body{{
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+    -webkit-text-size-adjust:100%;
+  }}
+  .header-bar{{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 16px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    flex-wrap:wrap;
+  }}
+  .title-group{{display:flex;align-items:center;gap:8px;min-width:0;}}
+  .title-group .emoji{{font-size:19px;}}
+  .title-group .name{{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}}
+  .date-picker{{display:flex;align-items:center;gap:8px;}}
+  .date-picker .current{{font-size:12.5px;color:var(--sub);font-weight:600;white-space:nowrap;}}
+  input[type=date]{{
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:6px 8px;
+    font-size:13px;
+    font-family:inherit;
+    background:var(--bg);
+    color:var(--text);
+  }}
+  .frame-wrap{{flex:1;min-height:0;}}
+  iframe{{width:100%;height:100%;border:none;display:block;background:var(--bg);}}
+  .empty{{padding:40px 16px;text-align:center;color:var(--sub);font-size:14px;}}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <a class="back" href="../index.html">← 전체 브리핑</a>
-    <h1 class="page-title">{topic['emoji']} {topic['title']}</h1>
-    <p class="sub">최근 {RECENT_COUNT}일치 브리핑만 표시됩니다.</p>
-    <div class="section-label">최근 브리핑</div>
-{recent_html}
+  <div class="header-bar">
+    <div class="title-group">
+      <span class="emoji">{topic['emoji']}</span>
+      <span class="name">{topic['title']}</span>
+    </div>
+    <div class="date-picker">
+      <span class="current" id="currentLabel">{format_date(latest) if latest else ''}</span>
+      <input type="date" id="datePicker" min="{earliest or ''}" max="{latest or ''}" value="{latest or ''}" aria-label="날짜 선택">
+    </div>
   </div>
+  <div class="frame-wrap">
+    {'<iframe id="briefingFrame" title="' + topic['title'] + '"></iframe>' if latest else '<p class="empty">아직 등록된 브리핑이 없습니다.</p>'}
+  </div>
+  <script>
+    const AVAILABLE = {available_json};
+    const input = document.getElementById('datePicker');
+    const frame = document.getElementById('briefingFrame');
+    const label = document.getElementById('currentLabel');
+
+    function nearestAvailable(target) {{
+      for (const d of AVAILABLE) {{ if (d <= target) return d; }}
+      return AVAILABLE[AVAILABLE.length - 1];
+    }}
+
+    function loadDate(d) {{
+      if (!d || !frame) return;
+      frame.src = './' + d + '.html';
+      input.value = d;
+      label.textContent = d.replaceAll('-', '.');
+    }}
+
+    if (AVAILABLE.length) {{
+      input.addEventListener('change', () => {{
+        const picked = input.value;
+        const match = AVAILABLE.includes(picked) ? picked : nearestAvailable(picked);
+        loadDate(match);
+      }});
+      loadDate(AVAILABLE[0]);
+    }}
+  </script>
 </body>
 </html>
 """
@@ -142,7 +202,7 @@ def build_root_index() -> str:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>뉴스 브리핑</title>
-<style>{STYLE}</style>
+<style>{ROOT_STYLE}</style>
 </head>
 <body>
   <div class="wrap">
