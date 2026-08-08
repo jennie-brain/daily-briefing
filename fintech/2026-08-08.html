@@ -31,44 +31,50 @@
     margin:0 auto;
     padding:20px 16px 32px;
   }
-  .page-title{
-    font-size:20px;
-    margin:0 0 6px;
-    font-weight:700;
+  .top-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
   }
-  .nav-header{margin:2px 0 14px;}
+  .page-title{font-size:15.5px;margin:0;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .screen-tabs{
     display:flex;
-    gap:6px;
-    margin-bottom:8px;
+    gap:2px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:3px;
+    flex-shrink:0;
   }
   .screen-tab{
-    flex:1;
     text-align:center;
-    font-size:12.5px;
-    font-weight:700;
+    font-size:12px;
+    font-weight:600;
     color:var(--sub);
-    padding:7px 4px;
+    padding:6px 10px;
     border-radius:8px;
-    background:var(--card);
-    border:1px solid var(--border);
+    background:transparent;
+    border:none;
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
     transition:all 0.15s ease;
   }
   .screen-tab.active{
-    background:var(--accent);
-    border-color:var(--accent);
-    color:#fff;
+    background:var(--card);
+    color:var(--accent);
+    box-shadow:0 1px 3px rgba(0,0,0,0.12);
   }
   .swipe-hint{
-    display:flex;
+    display:none;
     align-items:center;
     justify-content:center;
     gap:6px;
     text-align:center;
     font-size:12px;
     color:var(--sub);
+    margin-top:8px;
   }
   .swipe-hint .kbd-hint{
     color:var(--sub);
@@ -93,6 +99,31 @@
     line-height:1.6;
     margin-top:10px;
   }
+  .trend-summary-list{
+    margin:10px 0 0;
+    padding-left:0;
+    list-style:none;
+    font-size:14px;
+    color:var(--text);
+    line-height:1.55;
+  }
+  .trend-summary-list li{
+    position:relative;
+    padding-left:16px;
+    margin-bottom:8px;
+  }
+  .trend-summary-list li:last-child{margin-bottom:0;}
+  .trend-summary-list li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:8px;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--accent);
+  }
+  .trend-summary-list strong{color:var(--accent);font-weight:700;}
   .pager{
     display:flex;
     overflow-x:auto;
@@ -126,7 +157,18 @@
     color:var(--accent);
     margin-bottom:4px;
   }
-  .date{font-size:14px;color:var(--sub);margin-bottom:10px;}
+  .date{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--accent);
+    background:var(--accent-bg);
+    padding:4px 10px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
   .status-banner{
     margin-top:10px;
     padding:14px 16px;
@@ -326,55 +368,6 @@
     color:var(--sub);
     text-align:center;
   }
-  .page-fab{
-    position:fixed;
-    right:18px;
-    bottom:18px;
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    background:var(--accent);
-    color:#fff;
-    border:none;
-    box-shadow:0 2px 10px rgba(0,0,0,0.2);
-    font-size:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    z-index:50;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .page-fab:active{opacity:0.85;}
-  .page-menu{
-    position:fixed;
-    right:18px;
-    bottom:74px;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    box-shadow:0 4px 16px rgba(0,0,0,0.16);
-    overflow:hidden;
-    display:none;
-    z-index:50;
-    min-width:160px;
-  }
-  .page-menu.open{display:block;}
-  .page-menu button{
-    display:block;
-    width:100%;
-    text-align:left;
-    padding:12px 16px;
-    border:none;
-    background:none;
-    font-size:14px;
-    font-weight:600;
-    color:var(--text);
-    cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .page-menu button+button{border-top:1px solid var(--border);}
-  .page-menu button.active{color:var(--accent);background:var(--accent-bg);}
   .kbd-hint{display:none;}
   .nav-arrow{
     display:none;
@@ -402,20 +395,21 @@
   @media (hover:hover) and (pointer:fine){
     .kbd-hint{display:inline;}
     .nav-arrow{display:flex;}
+    .swipe-hint{display:flex;}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <h1 class="page-title">핀테크 · 토큰증권(STO) 뉴스 브리핑</h1>
-  <div class="nav-header">
+  <div class="top-bar">
+    <h1 class="page-title">핀테크 · 토큰증권(STO) 뉴스 브리핑</h1>
     <div class="screen-tabs" id="screenTabs">
-      <span class="screen-tab active" data-i="0">① 오늘</span>
-      <span class="screen-tab" data-i="1">② 30일 트렌드</span>
-      <span class="screen-tab" data-i="2">③ 1년 트렌드</span>
+      <span class="screen-tab active" data-i="0">오늘</span>
+      <span class="screen-tab" data-i="1">30일</span>
+      <span class="screen-tab" data-i="2">1년</span>
     </div>
-    <div class="swipe-hint">↔ 좌우로 스와이프해 넘겨보세요<span class="kbd-hint"> · ←/→ 키로도 이동</span></div>
+    <div class="swipe-hint">↔ 스와이프로 넘겨보세요<span class="kbd-hint"> · ←/→ 키로도 이동</span></div>
   </div>
 
   <div class="pager" id="pager">
@@ -423,7 +417,7 @@
     <!-- 화면 1: 오늘자 데일리 리포트 -->
     <section class="screen">
       <div class="screen-label">오늘 (Daily)</div>
-      <div class="date">리포트 날짜: 2026년 8월 8일 (토)</div>
+      <div class="date">📅 2026년 8월 8일 (토)</div>
       <div class="status-banner ok">
         <strong>핀테크는 새 소식 있음 · 토큰증권(STO)은 확정 발표 없이 카운트다운만 진행</strong>
         핀테크 쪽에서는 금융위원회가 토스의 얼굴인식 결제 서비스 '페이스페이'의 간편 실명확인 방식을 혁신금융서비스로 지정했습니다(7/31 의결, 8/6 보도). 토큰증권(STO)은 오늘 새로 확정된 발표는 없었지만, 1세대 조각투자 사업자 카사의 서비스 종료(8월 10일)가 이틀 앞으로 다가와 제도 공백의 여파가 임박했습니다.
@@ -478,7 +472,7 @@
     <!-- 화면 2: 최근 30일 트렌드 -->
     <section class="screen">
       <div class="screen-label">최근 30일 트렌드</div>
-      <div class="date">기준일: 2026년 8월 8일 (약 7월 9일 ~ 8월 8일)</div>
+      <div class="date">📅 2026년 8월 8일 (약 7월 9일 ~ 8월 8일)</div>
 
       <div class="trend-summary">
         <div class="trend-summary-label">이번 30일 핵심 키워드</div>
@@ -489,9 +483,14 @@
           <span class="topic-tag">#카사 조각투자 퇴장</span>
           <span class="topic-tag">#핀테크 신사업 확장</span>
         </div>
-        <div class="trend-summary-text">
-          지난 한 달 가장 큰 진전은 스테이블코인 입법이 '개별 의원 발의' 단계로 넘어간 것입니다. 7월 28일 더불어민주당 안도걸 의원과 국민의힘 김은혜 의원이 각각 원화 스테이블코인 발행·유통을 다루는 법안을 냈고, 그 전후로 민병덕·이강일 의원안까지 합쳐 벌써 네 건의 개별 입법이 국회에 쌓였습니다. 다만 이는 아직 정부와 여당이 하나로 합친 '당정 통합안'은 아니며, 그 통합 절차는 민주당 전당대회(8/17) 이후 태스크포스 재정비를 거쳐 9월 정기국회 발의를 목표로 하고 있습니다. 토큰증권(STO) 쪽은 여전히 정체가 뚜렷합니다. 금융위가 7월 말로 제시했던 하위법규·가이드라인 시한은 8월 8일 현재까지 지켜지지 않았고, 그 사이 1세대 부동산 조각투자 사업자 카사는 인가 요건을 채우지 못해 8월 10일 서비스를 종료하게 됐습니다. 유통 인프라 경쟁에서는 기술탈취 의혹에서 공정위 무혐의를 받아낸 NXT컨소시엄이 KDX컨소시엄과 다시 대등한 조건에서 8월 본인가 신청을 준비하고 있지만, 오늘까지 실제 접수가 완료됐다는 소식은 확인되지 않습니다. 핀테크 쪽에서는 카카오페이증권의 국내주식 소수점 거래 개시, 케이뱅크의 스테이블코인 오프램프 기술검증에 이어, 이번 주에는 토스의 얼굴인식 결제 '페이스페이' 간편 실명확인이 혁신금융서비스로 지정되며 700만 가입자 기반의 오프라인 결제 확장이 한층 쉬워졌습니다. 해외에서는 미국과 영국이 스테이블코인·토큰화 시장 규제 공조를 재확인했고, EU MiCA와 미국 GENIUS Act 모두 큰 틀은 잡혔지만 세부 규칙은 여전히 미완인 상태가 이어지고 있습니다.
-        </div>
+        <ul class="trend-summary-list">
+          <li><strong>개별 스테이블코인법 4건 발의</strong> — 7월 28일 안도걸(민주당)·김은혜(국민의힘) 의원이 각각 법안을 내며 민병덕·이강일 의원안까지 총 4건으로 늘었지만, 정부·여당 통합안은 9월 정기국회 발의로 다시 미뤄졌습니다.</li>
+          <li><strong>하위법규 여전히 미발표</strong> — 금융위가 제시했던 7월 말 시한을 넘겨 토큰증권 하위법규·가이드라인이 8월 8일 현재도 나오지 않았습니다.</li>
+          <li><strong>카사 조각투자 퇴장</strong> — 1세대 조각투자 사업자 카사가 인가 요건을 채우지 못해 8월 10일 서비스를 종료합니다.</li>
+          <li><strong>NXT 8월 본인가 준비</strong> — 공정위 무혐의 판단을 받은 NXT컨소시엄이 KDX와 대등한 조건에서 8월 본인가 신청을 준비 중이나, 실제 접수 완료 소식은 아직 없습니다.</li>
+          <li><strong>핀테크 신사업 확장</strong> — 카카오페이증권 소수점 거래 개시, 케이뱅크 오프램프 기술검증에 이어 토스 '페이스페이' 간편 실명확인이 혁신금융서비스로 지정됐습니다.</li>
+          <li><strong>해외</strong> — 미국·영국이 스테이블코인·토큰화 규제 공조를 재확인했지만, EU MiCA·미국 GENIUS Act 모두 세부 규칙은 여전히 미완입니다.</li>
+        </ul>
       </div>
 
       <div class="tab-group">
@@ -650,7 +649,7 @@
     <!-- 화면 3: 최근 1년 트렌드 -->
     <section class="screen">
       <div class="screen-label">최근 1년 트렌드</div>
-      <div class="date">기준일: 2026년 8월 8일 (2025.8 ~ 2026.8)</div>
+      <div class="date">📅 2026년 8월 8일 (2025.8 ~ 2026.8)</div>
 
       <div class="trend-summary">
         <div class="trend-summary-label">지난 1년 핵심 키워드</div>
@@ -661,9 +660,13 @@
           <span class="topic-tag">#거래소-금융권 결합</span>
           <span class="topic-tag">#글로벌 규제 정착</span>
         </div>
-        <div class="trend-summary-text">
-          지난 1년 국내 최대 사건은 전자증권법·자본시장법 개정으로 토큰증권의 법적 기반이 완성된 것입니다. 다만 법은 통과됐어도 하위법규가 계속 미뤄지면서, 1세대 조각투자 사업자였던 카사가 결국 인가 요건을 채우지 못해 8월 10일 문을 닫게 되는 등 '법제화 이후의 공백'이 실제 피해로 나타난 한 해였습니다. 장외거래소 예비인가를 둘러싼 KDX·NXT 경쟁은 본인가 심사 단계로 넘어갔고, 한때 기술탈취 의혹으로 멈춰 섰던 NXT는 8월 초 공정위 무혐의 결론을 받아내며 다시 KDX와 대등한 위치에서 8월 본인가 경쟁에 나서고 있습니다. 스테이블코인을 담을 입법은 1년 내내 정부·여당 통합안 없이 표류하다가, 최근 한 달 사이 안도걸·김은혜·민병덕·이강일 의원 등 개별 입법이 잇따르며 '누가 먼저 법안을 내느냐'는 경쟁 구도로 바뀌었지만, 정작 정부와 여당을 하나로 묶는 통합안은 9월 정기국회로 다시 미뤄졌습니다. 같은 기간 토스의 금융복합기업집단 지정, 카카오페이증권의 투자매매업 인가와 소수점거래·얼굴인식 결제 규제 완화, 미래에셋의 코빗 인수, 한국투자증권의 코인원 지분투자, 삼성 금융계열의 두나무 지분 취득까지 전통 금융과 디지털자산 인프라의 결합이 한 해 내내 이어졌습니다. 실적 면에서는 핀테크 기업 간 양극화도 뚜렷해져, 카카오페이가 8월 초 역대 최대 분기 실적을 낸 반면 케이뱅크는 수익성 둔화를 겪었고, 케이뱅크는 대신 람다256·케이에스넷과 스테이블코인 오프램프 기술검증으로 방향을 잡았습니다. 해외에서는 미국 GENIUS Act 제정과 EU MiCA 전면 적용으로 스테이블코인·가상자산 규제의 골격이 잡혔고 8월 초 미·영이 협력 의지를 재확인했지만 양쪽 모두 세부 규칙은 미완이며, 나스닥·NYSE·DTCC가 토큰화 인프라를 실제 가동 단계로 끌어올리고 삼성전자까지 스테이블코인 지원을 예고한 것이 가장 큰 구조 변화였습니다.
-        </div>
+        <ul class="trend-summary-list">
+          <li><strong>토큰증권 법제화, 그러나 공백 현실화</strong> — 전자증권법·자본시장법 개정으로 법적 기반은 완성됐지만 하위법규가 계속 미뤄져, 1세대 조각투자 카사가 인가 요건을 못 채워 8월 10일 문을 닫는 등 '법제화 이후 공백'이 실제 피해로 나타났습니다.</li>
+          <li><strong>KDX vs NXT</strong> — 장외거래소 예비인가 경쟁에서 기술탈취 의혹으로 멈췄던 NXT가 8월 초 공정위 무혐의를 받아 KDX와 다시 대등하게 8월 본인가 경쟁에 나서고 있습니다.</li>
+          <li><strong>스테이블코인 입법 경쟁</strong> — 정부·여당 통합안 없이 표류하다 최근 한 달 사이 4명의 의원이 개별 법안을 내는 경쟁 구도로 전환됐지만, 통합안은 9월 정기국회로 다시 미뤄졌습니다.</li>
+          <li><strong>거래소-금융권 결합</strong> — 토스 금융복합기업집단 지정, 카카오페이증권 인가·소수점거래, 미래에셋의 코빗 인수, 한투의 코인원 투자, 삼성 금융계열의 두나무 지분 취득까지 결합이 이어졌고, 카카오페이·케이뱅크 간 실적 양극화도 뚜렷해졌습니다.</li>
+          <li><strong>글로벌 규제 정착</strong> — 미국 GENIUS Act·EU MiCA로 규제 골격이 잡혔지만 세부 규칙은 미완이며, 나스닥·NYSE·DTCC의 토큰화 인프라 가동과 삼성전자의 스테이블코인 지원 예고가 가장 큰 구조 변화였습니다.</li>
+        </ul>
       </div>
 
       <div class="tab-group">
@@ -816,13 +819,6 @@
   <button class="nav-arrow prev" id="navPrev" aria-label="이전 화면" title="이전 화면 (←)" onclick="gotoScreen(currentScreenIndex()-1)">‹</button>
   <button class="nav-arrow next" id="navNext" aria-label="다음 화면" title="다음 화면 (→)" onclick="gotoScreen(currentScreenIndex()+1)">›</button>
 
-  <button class="page-fab" id="pageFab" aria-label="페이지 선택" onclick="togglePageMenu()">☰</button>
-  <div class="page-menu" id="pageMenu">
-    <button class="active" data-i="0" onclick="gotoScreen(0)">① 오늘</button>
-    <button data-i="1" onclick="gotoScreen(1)">② 30일 트렌드</button>
-    <button data-i="2" onclick="gotoScreen(2)">③ 1년 트렌드</button>
-  </div>
-
   <footer>
     본 리포트는 자동 생성되었습니다. 새로운 확정 뉴스가 없는 날에는 진행 중인 사안만 참고용으로 표시됩니다. 30일/1년 페이지는 매 실행 시점 기준으로 새로 조사한 트렌드 요약입니다.
   </footer>
@@ -859,7 +855,6 @@
 
   var pager = document.getElementById('pager');
   var dots = document.querySelectorAll('.dot');
-  var pageMenuBtns = document.querySelectorAll('#pageMenu button');
   var screenTabs = document.querySelectorAll('.screen-tab');
   var navPrev = document.getElementById('navPrev');
   var navNext = document.getElementById('navNext');
@@ -872,7 +867,6 @@
   function syncIndicators(){
     var idx = currentScreenIndex();
     dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
-    pageMenuBtns.forEach(function(b,i){ b.classList.toggle('active', i===idx); });
     screenTabs.forEach(function(t,i){ t.classList.toggle('active', i===idx); });
     if(navPrev) navPrev.disabled = idx === 0;
     if(navNext) navNext.disabled = idx === SCREEN_COUNT - 1;
@@ -894,20 +888,7 @@
   function gotoScreen(i){
     i = Math.max(0, Math.min(SCREEN_COUNT - 1, i));
     pager.scrollTo({left: i * pager.clientWidth, behavior:'smooth'});
-    document.getElementById('pageMenu').classList.remove('open');
   }
-
-  function togglePageMenu(){
-    document.getElementById('pageMenu').classList.toggle('open');
-  }
-
-  document.addEventListener('click', function(e){
-    var menu = document.getElementById('pageMenu');
-    var fab = document.getElementById('pageFab');
-    if(menu.classList.contains('open') && !menu.contains(e.target) && e.target !== fab){
-      menu.classList.remove('open');
-    }
-  });
 
   // 방향키로 화면 전환 (←/→)
   document.addEventListener('keydown', function(e){
