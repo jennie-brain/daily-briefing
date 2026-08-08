@@ -1,12 +1,12 @@
-# fintech-daily-briefing
+# daily-briefing
 
 핀테크·토큰증권(STO)과 정보보안 분야의 국내외 최신 동향을 매일 자동으로 수집·정리하는 데일리 브리핑 사이트입니다. 매일 아침 새 소식을 검색해 리포트를 생성하고, 이 저장소에 자동으로 반영됩니다.
 
 ## 보기
 
-- 전체 홈: https://jennie-brain.github.io/fintech-daily-briefing/
-- 핀테크·토큰증권(STO): https://jennie-brain.github.io/fintech-daily-briefing/fintech/
-- 정보보안: https://jennie-brain.github.io/fintech-daily-briefing/security/
+- 전체 홈: https://jennie-brain.github.io/daily-briefing/
+- 핀테크·토큰증권(STO): https://jennie-brain.github.io/daily-briefing/fintech/
+- 정보보안: https://jennie-brain.github.io/daily-briefing/security/
 
 각 페이지 우측 상단의 날짜 피커로 지난 리포트도 날짜별로 조회할 수 있습니다.
 
