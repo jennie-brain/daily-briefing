@@ -31,50 +31,44 @@
     margin:0 auto;
     padding:20px 16px 32px;
   }
-  .top-bar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:14px;
+  .page-title{
+    font-size:20px;
+    margin:0 0 6px;
+    font-weight:700;
   }
-  .page-title{font-size:15.5px;margin:0;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .nav-header{margin:2px 0 14px;}
   .screen-tabs{
     display:flex;
-    gap:2px;
-    background:var(--bg);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:3px;
-    flex-shrink:0;
+    gap:6px;
+    margin-bottom:8px;
   }
   .screen-tab{
+    flex:1;
     text-align:center;
-    font-size:12px;
-    font-weight:600;
+    font-size:12.5px;
+    font-weight:700;
     color:var(--sub);
-    padding:6px 10px;
+    padding:7px 4px;
     border-radius:8px;
-    background:transparent;
-    border:none;
+    background:var(--card);
+    border:1px solid var(--border);
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
     transition:all 0.15s ease;
   }
   .screen-tab.active{
-    background:var(--card);
-    color:var(--accent);
-    box-shadow:0 1px 3px rgba(0,0,0,0.12);
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
   }
   .swipe-hint{
-    display:none;
+    display:flex;
     align-items:center;
     justify-content:center;
     gap:6px;
     text-align:center;
     font-size:12px;
     color:var(--sub);
-    margin-top:8px;
   }
   .swipe-hint .kbd-hint{
     color:var(--sub);
@@ -132,18 +126,7 @@
     color:var(--accent);
     margin-bottom:4px;
   }
-  .date{
-    display:inline-flex;
-    align-items:center;
-    gap:4px;
-    font-size:12.5px;
-    font-weight:600;
-    color:var(--accent);
-    background:var(--accent-bg);
-    padding:4px 10px;
-    border-radius:999px;
-    margin-bottom:10px;
-  }
+  .date{font-size:14px;color:var(--sub);margin-bottom:10px;}
   .status-banner{
     margin-top:10px;
     padding:14px 16px;
@@ -343,6 +326,55 @@
     color:var(--sub);
     text-align:center;
   }
+  .page-fab{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:50;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .page-fab:active{opacity:0.85;}
+  .page-menu{
+    position:fixed;
+    right:18px;
+    bottom:74px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.16);
+    overflow:hidden;
+    display:none;
+    z-index:50;
+    min-width:160px;
+  }
+  .page-menu.open{display:block;}
+  .page-menu button{
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:12px 16px;
+    border:none;
+    background:none;
+    font-size:14px;
+    font-weight:600;
+    color:var(--text);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .page-menu button+button{border-top:1px solid var(--border);}
+  .page-menu button.active{color:var(--accent);background:var(--accent-bg);}
   .kbd-hint{display:none;}
   .nav-arrow{
     display:none;
@@ -370,21 +402,20 @@
   @media (hover:hover) and (pointer:fine){
     .kbd-hint{display:inline;}
     .nav-arrow{display:flex;}
-    .swipe-hint{display:flex;}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="top-bar">
-    <h1 class="page-title">핀테크 · 토큰증권(STO) 뉴스 브리핑</h1>
+  <h1 class="page-title">핀테크 · 토큰증권(STO) 뉴스 브리핑</h1>
+  <div class="nav-header">
     <div class="screen-tabs" id="screenTabs">
-      <span class="screen-tab active" data-i="0">오늘</span>
-      <span class="screen-tab" data-i="1">30일</span>
-      <span class="screen-tab" data-i="2">1년</span>
+      <span class="screen-tab active" data-i="0">① 오늘</span>
+      <span class="screen-tab" data-i="1">② 30일 트렌드</span>
+      <span class="screen-tab" data-i="2">③ 1년 트렌드</span>
     </div>
-    <div class="swipe-hint">↔ 스와이프로 넘겨보세요<span class="kbd-hint"> · ←/→ 키로도 이동</span></div>
+    <div class="swipe-hint">↔ 좌우로 스와이프해 넘겨보세요<span class="kbd-hint"> · ←/→ 키로도 이동</span></div>
   </div>
 
   <div class="pager" id="pager">
@@ -392,7 +423,7 @@
     <!-- 화면 1: 오늘자 데일리 리포트 -->
     <section class="screen">
       <div class="screen-label">오늘 (Daily)</div>
-      <div class="date">📅 2026년 7월 31일</div>
+      <div class="date">리포트 날짜: 2026년 7월 31일</div>
       <div class="status-banner ok">
         <strong>핀테크·토큰증권(STO) 모두 새 소식 있음</strong>
         토큰증권(STO) 쪽에서는 금융당국이 "7월 발표"를 예고했던 하위법규 개정안·가이드라인이 결국 8월로 밀린다는 사실이 처음 확인됐고(7/30), 그 공백 속에 조각투자 시장의 무게추가 부동산에서 국유재산·정형증권으로 옮겨가는 흐름이 보도됐습니다. 핀테크 쪽에서는 케이뱅크가 상반기 순이익 601억원(전년 대비 -29.6%)을 공시하며 인터넷은행 성장세 둔화를 드러냈습니다(7/30). 오늘(7/31)은 금융위의 2027년도 D-SIB 선정 결과와 금융복합기업집단 감독규정 개정 발표가 예정돼 있습니다.
@@ -483,7 +514,7 @@
     <!-- 화면 2: 최근 30일 트렌드 -->
     <section class="screen">
       <div class="screen-label">최근 30일 트렌드</div>
-      <div class="date">📅 2026년 7월 31일 (약 7월 1일 ~ 7월 31일)</div>
+      <div class="date">기준일: 2026년 7월 31일 (약 7월 1일 ~ 7월 31일)</div>
 
       <div class="trend-summary">
         <div class="trend-summary-label">이번 30일 핵심 키워드</div>
@@ -663,7 +694,7 @@
     <!-- 화면 3: 최근 1년 트렌드 -->
     <section class="screen">
       <div class="screen-label">최근 1년 트렌드</div>
-      <div class="date">📅 2026년 7월 31일 (2025.8 ~ 2026.7)</div>
+      <div class="date">기준일: 2026년 7월 31일 (2025.8 ~ 2026.7)</div>
 
       <div class="trend-summary">
         <div class="trend-summary-label">지난 1년 핵심 키워드</div>
@@ -836,6 +867,13 @@
   <button class="nav-arrow prev" id="navPrev" aria-label="이전 화면" title="이전 화면 (←)" onclick="gotoScreen(currentScreenIndex()-1)">‹</button>
   <button class="nav-arrow next" id="navNext" aria-label="다음 화면" title="다음 화면 (→)" onclick="gotoScreen(currentScreenIndex()+1)">›</button>
 
+  <button class="page-fab" id="pageFab" aria-label="페이지 선택" onclick="togglePageMenu()">☰</button>
+  <div class="page-menu" id="pageMenu">
+    <button class="active" data-i="0" onclick="gotoScreen(0)">① 오늘</button>
+    <button data-i="1" onclick="gotoScreen(1)">② 30일 트렌드</button>
+    <button data-i="2" onclick="gotoScreen(2)">③ 1년 트렌드</button>
+  </div>
+
   <footer>
     본 리포트는 자동 생성되었습니다. 새로운 확정 뉴스가 없는 날에는 진행 중인 사안만 참고용으로 표시됩니다. 30일/1년 페이지는 매 실행 시점 기준으로 새로 조사한 트렌드 요약입니다.
   </footer>
@@ -872,6 +910,7 @@
 
   var pager = document.getElementById('pager');
   var dots = document.querySelectorAll('.dot');
+  var pageMenuBtns = document.querySelectorAll('#pageMenu button');
   var screenTabs = document.querySelectorAll('.screen-tab');
   var navPrev = document.getElementById('navPrev');
   var navNext = document.getElementById('navNext');
@@ -884,6 +923,7 @@
   function syncIndicators(){
     var idx = currentScreenIndex();
     dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+    pageMenuBtns.forEach(function(b,i){ b.classList.toggle('active', i===idx); });
     screenTabs.forEach(function(t,i){ t.classList.toggle('active', i===idx); });
     if(navPrev) navPrev.disabled = idx === 0;
     if(navNext) navNext.disabled = idx === SCREEN_COUNT - 1;
@@ -905,7 +945,20 @@
   function gotoScreen(i){
     i = Math.max(0, Math.min(SCREEN_COUNT - 1, i));
     pager.scrollTo({left: i * pager.clientWidth, behavior:'smooth'});
+    document.getElementById('pageMenu').classList.remove('open');
   }
+
+  function togglePageMenu(){
+    document.getElementById('pageMenu').classList.toggle('open');
+  }
+
+  document.addEventListener('click', function(e){
+    var menu = document.getElementById('pageMenu');
+    var fab = document.getElementById('pageFab');
+    if(menu.classList.contains('open') && !menu.contains(e.target) && e.target !== fab){
+      menu.classList.remove('open');
+    }
+  });
 
   // 방향키로 화면 전환 (←/→)
   document.addEventListener('keydown', function(e){
