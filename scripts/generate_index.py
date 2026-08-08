@@ -65,17 +65,6 @@ STYLE = """
   .topic-card .emoji{font-size:26px;}
   .topic-card .name{font-weight:700;font-size:17px;margin:8px 0 4px;}
   .topic-card .sub{margin:0;}
-  details{margin-top:6px;}
-  summary{cursor:pointer;color:var(--accent);font-size:13px;font-weight:600;padding:8px 0;}
-  .archive-list{display:flex;flex-wrap:wrap;gap:6px;padding:6px 0 4px;}
-  .archive-list a{
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:5px 10px;
-    font-size:12.5px;
-    background:var(--card);
-  }
-  .archive-list a:hover{border-color:var(--accent);color:var(--accent);}
 """
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}\.html$")
@@ -97,7 +86,8 @@ def build_topic_index(topic: dict) -> str:
     directory = ROOT / topic["dir"]
     dates = list_dated_files(directory)
     recent = dates[:RECENT_COUNT]
-    archive = dates[RECENT_COUNT:]
+    # Dates beyond RECENT_COUNT stay in the folder (never deleted) but are
+    # intentionally not linked here, per request to only show the latest week.
 
     card_blocks = []
     for i, d in enumerate(recent):
@@ -109,18 +99,6 @@ def build_topic_index(topic: dict) -> str:
             f"      </a>"
         )
     recent_html = "\n".join(card_blocks)
-
-    archive_html = ""
-    if archive:
-        links = "\n".join(f'          <a href="./{d}.html">{format_date(d)}</a>' for d in archive)
-        archive_html = (
-            "      <details>\n"
-            f"        <summary>지난 기록 더보기 ({len(archive)}개)</summary>\n"
-            '        <div class="archive-list">\n'
-            f"{links}\n"
-            "        </div>\n"
-            "      </details>"
-        )
 
     return f"""<!DOCTYPE html>
 <html lang="ko">
@@ -134,10 +112,9 @@ def build_topic_index(topic: dict) -> str:
   <div class="wrap">
     <a class="back" href="../index.html">← 전체 브리핑</a>
     <h1 class="page-title">{topic['emoji']} {topic['title']}</h1>
-    <p class="sub">최근 {RECENT_COUNT}일치 브리핑입니다. 이전 기록은 아래에서 볼 수 있어요.</p>
+    <p class="sub">최근 {RECENT_COUNT}일치 브리핑만 표시됩니다.</p>
     <div class="section-label">최근 브리핑</div>
 {recent_html}
-{archive_html}
   </div>
 </body>
 </html>
