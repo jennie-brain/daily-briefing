@@ -69,6 +69,21 @@
   .calendar-picker input[type="date"]::-webkit-inner-spin-button{
     display:none;
   }
+  .date-msg{
+    position:absolute;
+    top:calc(100% + 4px);
+    right:0;
+    font-size:11px;
+    color:var(--sub);
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:4px 8px;
+    white-space:nowrap;
+    display:none;
+    z-index:50;
+  }
+  .date-msg.show{display:block;}
   .nav-header{margin:16px 0 14px;}
   .screen-tabs{
     display:flex;
@@ -345,7 +360,8 @@
   <div class="header-row">
     <h1 class="page-title">정보보안 뉴스 브리핑</h1>
     <div class="calendar-picker">
-      <input type="date" id="datePicker" min="2026-07-23" max="2026-08-08" value="2026-08-08" aria-label="날짜별로 보기">
+      <input type="date" id="datePicker" min="2026-08-08" max="2026-08-08" value="2026-08-08" aria-label="날짜별로 보기">
+      <span class="date-msg" id="dateMsg">해당 날짜의 리포트가 없습니다</span>
     </div>
   </div>
   <div class="nav-header">
@@ -361,7 +377,7 @@
 
     <!-- 화면 1: 오늘자 데일리 리포트 -->
     <section class="screen">
-      <div class="screen-label">오늘 (Daily)</div>
+      <div class="screen-label">일일 브리핑</div>
       <div class="date">리포트 날짜: 2026년 8월 8일 (최근 확인 기준: 8월 6~8일)</div>
       <div class="status-banner">
         <strong>🟡 새로운 소식 있음 (3건, 국내 0 · 해외 3)</strong>
@@ -846,12 +862,33 @@
   });
 
   var datePicker = document.getElementById('datePicker');
+  var dateMsg = document.getElementById('dateMsg');
+  var lastValidDate = datePicker ? datePicker.value : null;
+  var dateMsgTimer = null;
+
+  function showDateMsg(){
+    if(!dateMsg) return;
+    dateMsg.classList.add('show');
+    clearTimeout(dateMsgTimer);
+    dateMsgTimer = setTimeout(function(){ dateMsg.classList.remove('show'); }, 2500);
+  }
+
   if(datePicker){
     datePicker.addEventListener('change', function(e){
       var d = e.target.value;
       if(!d) return;
       var inArchive = location.pathname.indexOf('/archive/') !== -1;
-      location.href = (inArchive ? '' : 'archive/') + d + '.html';
+      var target = (inArchive ? '' : 'archive/') + d + '.html';
+      fetch(target, {method:'HEAD'}).then(function(res){
+        if(res.ok){
+          location.href = target;
+        } else {
+          datePicker.value = lastValidDate;
+          showDateMsg();
+        }
+      }).catch(function(){
+        location.href = target;
+      });
     });
   }
 
