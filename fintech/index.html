@@ -82,6 +82,9 @@
   .source-chip{font-size:11px;color:var(--accent);background:var(--accent-weak);
     border-radius:6px;padding:4px 8px;text-decoration:none;}
 
+  .trend-list{display:block;}
+  .subtabs + .subtabs{margin-top:0;}
+
   .empty-note{background:var(--card);border:1px dashed var(--border);border-radius:10px;
     padding:16px;font-size:13px;color:var(--sub);text-align:center;}
 
@@ -175,11 +178,17 @@
             <span class="tag">STO 하위법규 지연</span>
             <span class="tag">STO 테마주 강세</span>
             <span class="tag">토큰화 펀드 실증</span>
-            <span class="tag">#해외 GENIUS Act</span>
-            <span class="tag">#해외 EU MiCA 재정비</span>
+            <span class="tag">GENIUS Act</span>
+            <span class="tag">EU MiCA 재정비</span>
           </div>
         </div>
 
+        <div class="subtabs">
+          <div class="subtab active" data-target="trend30-domestic">국내</div>
+          <div class="subtab" data-target="trend30-global">해외</div>
+        </div>
+
+        <div class="trend-list" id="trend30-domestic">
         <div class="trend-card">
           <div class="trend-title">토큰증권(STO) 하위법규, 8월 중순 넘겨서도 표류</div>
           <div class="topic-tags"><span class="tag">금융위원회</span><span class="tag">하위법규</span></div>
@@ -228,9 +237,12 @@
           </div>
         </div>
 
+        </div>
+
+        <div class="trend-list" id="trend30-global" style="display:none;">
         <div class="trend-card">
           <div class="trend-title">서클, 카카오·토스뱅크와 USDC 결제 협력 MOU(7/23)</div>
-          <div class="topic-tags"><span class="tag">#해외</span><span class="tag">서클(Circle)</span><span class="tag">USDC</span></div>
+          <div class="topic-tags"><span class="tag">서클(Circle)</span><span class="tag">USDC</span></div>
           <div class="trend-text">미국 스테이블코인 발행사 서클(Circle)이 7월 23일 카카오그룹, 토스뱅크와 각각 업무협약을 맺고 USDC와 원화 스테이블코인을 활용한 해외송금·가맹점 결제·블록체인 인프라 연계 방안을 함께 검토하기로 했다. 국내 원화 스테이블코인 입법이 지연되는 사이, 글로벌 스테이블코인 사업자가 국내 대형 플랫폼과 먼저 접점을 넓히는 모습이다.</div>
           <div class="source-row">
             <a class="source-chip" href="https://www.crowdfundinsider.com/2026/07/293288-circle-partners-with-kakao-and-toss-bank-to-enable-stablecoin-payment-solutions-in-south-korea/" target="_blank" rel="noopener">Crowdfund Insider</a>
@@ -240,7 +252,7 @@
 
         <div class="trend-card">
           <div class="trend-title">미국 재무부, GENIUS Act 스테이블코인 세부규정 입법예고(8/17)</div>
-          <div class="topic-tags"><span class="tag">#해외</span><span class="tag">GENIUS Act</span><span class="tag">미국 재무부</span></div>
+          <div class="topic-tags"><span class="tag">GENIUS Act</span><span class="tag">미국 재무부</span></div>
           <div class="trend-text">미국 재무부가 8월 17일 GENIUS Act 3조 이행을 위한 규정 초안(NPRM)을 공개하고 60일간 의견수렴에 들어갔다. 미국 내 스테이블코인 발행 요건과 해외 발행사가 미국인에게 토큰을 판매할 수 있는 조건을 구체화하는 내용으로, 2027년 1월 법 시행을 앞두고 실무 규칙이 처음으로 윤곽을 드러냈다. 한국이 준비 중인 원화 스테이블코인 입법에도 참고 사례로 자주 인용된다.</div>
           <div class="source-row">
             <a class="source-chip" href="https://www.theblock.co/news/regulation/2026-08-17-us-treasury-seeks-public-comment-genius-act-stablecoin-rules-411987" target="_blank" rel="noopener">The Block</a>
@@ -250,12 +262,13 @@
 
         <div class="trend-card">
           <div class="trend-title">EU, MiCA 재정비 논의…레볼루트 등 USDT 상장폐지(8/31 마감)</div>
-          <div class="topic-tags"><span class="tag">#해외</span><span class="tag">EU MiCA</span><span class="tag">USDT 상장폐지</span></div>
+          <div class="topic-tags"><span class="tag">EU MiCA</span><span class="tag">USDT 상장폐지</span></div>
           <div class="trend-text">지난 7월 1일 전환기간이 끝나며 전면 시행에 들어간 EU 가상자산시장법(MiCA)을 두고, EU 집행위가 역외 스테이블코인 발행사·토큰화 결제 규율을 손보는 재정비(MiCA 2.0) 의견수렴을 8월 31일까지 진행하고 있다. 같은 시한까지 레볼루트가 MiCA 미승인 스테이블코인인 USDT를 유럽 서비스에서 상장폐지하기로 하는 등, 제도 정비와 시장 재편이 동시에 진행되고 있다.</div>
           <div class="source-row">
             <a class="source-chip" href="https://thepaypers.com/crypto-web3-and-cbdc/news/eu-to-review-mica-framework-for-non-eu-stablecoin-issuers" target="_blank" rel="noopener">The Paypers</a>
             <a class="source-chip" href="https://www.kucoin.com/news/flash/revolut-to-delist-usdt-by-august-31-amid-eu-mica-compliance-deadline" target="_blank" rel="noopener">KuCoin</a>
           </div>
+        </div>
         </div>
       </div>
 
@@ -270,11 +283,17 @@
             <span class="tag">STO 법제화 완료</span>
             <span class="tag">글로벌 토큰화 급성장</span>
             <span class="tag">자산운용사 온체인 실험</span>
-            <span class="tag">#해외 GENIUS Act</span>
-            <span class="tag">#해외 MiCA·DTCC</span>
+            <span class="tag">GENIUS Act</span>
+            <span class="tag">MiCA·DTCC</span>
           </div>
         </div>
 
+        <div class="subtabs">
+          <div class="subtab active" data-target="trend1y-domestic">국내</div>
+          <div class="subtab" data-target="trend1y-global">해외</div>
+        </div>
+
+        <div class="trend-list" id="trend1y-domestic">
         <div class="trend-card">
           <div class="trend-title">토큰증권(STO) 법적 기반 완성, 시행 준비 국면 진입</div>
           <div class="topic-tags"><span class="tag">전자증권법·자본시장법</span><span class="tag">2027.2 시행</span></div>
@@ -322,9 +341,12 @@
           </div>
         </div>
 
+        </div>
+
+        <div class="trend-list" id="trend1y-global" style="display:none;">
         <div class="trend-card">
           <div class="trend-title">미국 GENIUS Act, 스테이블코인 첫 연방 규제 프레임워크로 자리잡아</div>
-          <div class="topic-tags"><span class="tag">#해외</span><span class="tag">GENIUS Act</span><span class="tag">미국</span></div>
+          <div class="topic-tags"><span class="tag">GENIUS Act</span><span class="tag">미국</span></div>
           <div class="trend-text">2025년 7월 트럼프 대통령이 GENIUS Act에 서명하며 미국 최초의 연방 차원 스테이블코인 규제 프레임워크가 마련됐다. 이후 1년간 재무부·OCC·FDIC 등이 세부 시행규칙을 다듬어 왔고, 지난 8월에는 발행·판매 요건에 관한 입법예고가 나오는 등 2027년 1월 전면 시행을 향해 후속 규정이 구체화되는 단계에 들어섰다.</div>
           <div class="source-row">
             <a class="source-chip" href="https://www.theblock.co/news/regulation/2026-08-17-us-treasury-seeks-public-comment-genius-act-stablecoin-rules-411987" target="_blank" rel="noopener">The Block</a>
@@ -333,12 +355,13 @@
 
         <div class="trend-card">
           <div class="trend-title">EU MiCA 전면 시행 · 美 DTCC 토큰화 증권 상용화로 해외 인프라 경쟁 가속</div>
-          <div class="topic-tags"><span class="tag">#해외</span><span class="tag">MiCA</span><span class="tag">DTCC</span></div>
+          <div class="topic-tags"><span class="tag">MiCA</span><span class="tag">DTCC</span></div>
           <div class="trend-text">EU는 지난 7월 1일 MiCA 전환기간을 끝내고 전면 시행에 들어갔고, 미국에서는 예탁결제기관 DTCC가 7월 15일부터 블랙록·JP모간·골드만삭스 등이 참여하는 토큰화 주식·국채 실거래를 시작해 10월 정식 서비스를 앞두고 있다. 지난 1년간 스테이블코인·토큰화 증권을 둘러싼 미국·EU의 제도화가 동시에 속도를 내면서, 한국도 이 흐름에 맞춰 자국 규제를 재정비해야 하는 압박이 커졌다.</div>
           <div class="source-row">
             <a class="source-chip" href="https://www.theblock.co/news/markets/2026-07-15-dtcc-begins-first-tokenized-stock-and-treasury-production-trades-involving-jpmorgan-blackrock-and-goldman-wsj-408419" target="_blank" rel="noopener">The Block</a>
             <a class="source-chip" href="https://thepaypers.com/crypto-web3-and-cbdc/news/eu-to-review-mica-framework-for-non-eu-stablecoin-issuers" target="_blank" rel="noopener">The Paypers</a>
           </div>
+        </div>
         </div>
       </div>
 
@@ -426,6 +449,21 @@
       document.getElementById('list-fintech').style.display = (target === 'fintech') ? 'flex' : 'none';
       document.getElementById('list-sto').style.display = (target === 'sto') ? 'flex' : 'none';
       setTimeout(updatePagerHeight, 50);
+    });
+  });
+
+  document.querySelectorAll('.subtabs').forEach(function(group){
+    var items = group.querySelectorAll('.subtab');
+    items.forEach(function(it){
+      it.addEventListener('click', function(){
+        items.forEach(function(s){ s.classList.remove('active'); });
+        it.classList.add('active');
+        items.forEach(function(s){
+          var el = document.getElementById(s.dataset.target);
+          if(el) el.style.display = (s === it) ? 'block' : 'none';
+        });
+        setTimeout(updatePagerHeight, 50);
+      });
     });
   });
 
