@@ -2,46 +2,32 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>정보보안 뉴스 브리핑</title>
 <style>
 :root{
   --bg:#f5f6f8;
   --card:#ffffff;
-  --text:#1a1d23;
+  --text:#1c2126;
   --sub:#6b7280;
   --border:#e5e7eb;
   --accent:#2563eb;
   --danger:#dc2626;
-  --warn:#d97706;
-  --safe:#059669;
-  --radius:12px;
+  --danger-bg:#fef2f2;
+  --warn:#b45309;
+  --warn-bg:#fffbeb;
+  --good:#15803d;
+  --good-bg:#f0fdf4;
+  --info:#1d4ed8;
+  --info-bg:#eff6ff;
 }
 *{box-sizing:border-box;}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-.app{
-  max-width:640px;
-  margin:0 auto;
-  padding:14px 16px 24px;
-}
-.swipe-hint{
-  text-align:center;
-  font-size:11.5px;
-  color:var(--sub);
-  margin-bottom:10px;
-}
-.header-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+body{display:flex;justify-content:center;}
+.app{width:100%;max-width:640px;min-height:100vh;background:var(--bg);padding-bottom:20px;}
+
+.nav-header{margin:16px 0 14px;padding:0 16px;}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .page-title{
   font-size:19px;
   font-weight:700;
@@ -50,14 +36,12 @@ body{
   overflow:hidden;
   text-overflow:ellipsis;
   min-width:0;
+  flex:1 1 auto;
 }
 @media (max-width:359px){
   .page-title{font-size:16px;}
 }
-.calendar-picker{
-  position:relative;
-  flex-shrink:0;
-}
+.calendar-picker{position:relative;flex:0 0 auto;}
 #datePicker{
   width:108px;
   font-size:11.5px;
@@ -66,11 +50,9 @@ body{
   border-radius:6px;
   background:var(--card);
   color:var(--text);
-  font-family:inherit;
+  box-sizing:border-box;
 }
-#datePicker::-webkit-inner-spin-button{
-  display:none;
-}
+#datePicker::-webkit-inner-spin-button{display:none;}
 .date-msg{
   position:absolute;
   top:calc(100% + 4px);
@@ -84,34 +66,33 @@ body{
   white-space:nowrap;
   display:none;
   z-index:50;
-  box-shadow:0 2px 6px rgba(0,0,0,.06);
 }
 .date-msg.show{display:block;}
-.nav-header{margin:16px 0 14px;}
-.screen-tabs{
-  display:flex;
-  gap:6px;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:4px;
-}
-.tab{
-  flex:1;
-  border:none;
-  background:transparent;
-  padding:8px 4px;
+
+.screen-tabs{display:flex;gap:6px;margin-top:12px;}
+.tab-btn{
+  flex:1 1 0;
   font-size:12.5px;
-  font-weight:600;
+  padding:8px 4px;
+  border:1px solid var(--border);
+  background:var(--card);
   color:var(--sub);
   border-radius:8px;
   cursor:pointer;
-  font-family:inherit;
+  font-weight:600;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
-.tab.active{
-  background:var(--accent);
-  color:#fff;
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+.swipe-hint{
+  text-align:center;
+  font-size:11px;
+  color:var(--sub);
+  padding:0 16px 8px;
 }
+
 .pager-wrap{position:relative;}
 .pager{
   display:flex;
@@ -119,9 +100,9 @@ body{
   overflow-x:auto;
   overflow-y:hidden;
   scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
   transition:height 0.2s ease;
   scrollbar-width:none;
-  -ms-overflow-style:none;
 }
 .pager::-webkit-scrollbar{display:none;}
 .screen{
@@ -129,544 +110,470 @@ body{
   max-width:100%;
   scroll-snap-align:start;
   box-sizing:border-box;
+  padding:2px 16px 24px;
 }
-.screen-inner{padding:2px 2px 6px;}
+
 .nav-arrow{
+  display:none;
   position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  width:34px;
-  height:34px;
+  top:80px;
+  width:32px;
+  height:32px;
   border-radius:50%;
   border:1px solid var(--border);
   background:var(--card);
   color:var(--text);
-  font-size:18px;
-  cursor:pointer;
-  display:none;
+  font-size:16px;
   align-items:center;
   justify-content:center;
-  z-index:20;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
+  cursor:pointer;
+  z-index:10;
+  box-shadow:0 1px 4px rgba(0,0,0,0.08);
 }
-.nav-arrow.left{left:-6px;}
-.nav-arrow.right{right:-6px;}
-.nav-arrow:disabled{opacity:.3;cursor:default;}
+.nav-arrow.left{left:-4px;}
+.nav-arrow.right{right:-4px;}
+.nav-arrow:disabled{opacity:0.3;cursor:default;}
 @media (hover:hover) and (pointer:fine){
   .nav-arrow{display:flex;}
 }
-.dots{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  margin-top:12px;
-}
-.dot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:var(--border);
-  transition:all .2s ease;
-}
-.dot.active{
-  background:var(--accent);
-  width:18px;
-  border-radius:4px;
-}
-.screen-label{
-  font-size:13px;
-  color:var(--sub);
-  font-weight:700;
-  letter-spacing:.2px;
-  margin-bottom:2px;
-}
-.date{
-  font-size:12px;
-  color:var(--sub);
-  margin-bottom:12px;
-}
+
+.dots{display:flex;justify-content:center;gap:6px;padding:10px 0 4px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;}
+.dot.active{background:var(--accent);width:18px;border-radius:4px;}
+
+.screen-label{font-size:13px;font-weight:700;color:var(--accent);margin-top:10px;}
+.date{font-size:12px;color:var(--sub);margin-top:2px;margin-bottom:10px;}
+
 .status-banner{
-  padding:10px 14px;
   border-radius:10px;
+  padding:10px 12px;
   font-size:13px;
-  margin-bottom:14px;
   font-weight:600;
-}
-.status-banner.has-news{
-  background:rgba(37,99,235,.08);
-  color:var(--accent);
-}
-.status-banner.none{
-  background:var(--card);
-  border:1px solid var(--border);
-  color:var(--sub);
-}
-.news-tabs{
-  display:flex;
-  gap:8px;
   margin-bottom:12px;
+  background:var(--info-bg);
+  color:var(--info);
+  border:1px solid #bfdbfe;
+  line-height:1.5;
 }
-.news-tab-btn{
-  flex:1;
-  padding:8px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:var(--card);
+.status-banner.urgent{background:var(--danger-bg);color:var(--danger);border-color:#fecaca;}
+
+.region-tabs{display:flex;gap:6px;margin-bottom:10px;}
+.region-btn{
+  flex:1 1 0;
   font-size:13px;
-  font-weight:600;
-  color:var(--sub);
-  cursor:pointer;
-  font-family:inherit;
-}
-.news-tab-btn.active{
-  background:var(--accent);
-  color:#fff;
-  border-color:var(--accent);
-}
-.news-item{
+  padding:7px 0;
   border:1px solid var(--border);
-  border-radius:var(--radius);
   background:var(--card);
+  color:var(--sub);
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+.region-btn.active{background:var(--text);color:#fff;border-color:var(--text);}
+
+.news-item{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
   margin-bottom:10px;
   overflow:hidden;
 }
 .news-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  width:100%;
+  text-align:left;
+  background:none;
+  border:none;
   padding:12px 14px;
   cursor:pointer;
-  gap:8px;
+  font-family:inherit;
+  color:var(--text);
+  position:relative;
 }
-.news-head-text{flex:1;min-width:0;}
+.news-tags{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;}
 .tag{
   display:inline-block;
-  font-size:11px;
-  padding:2px 8px;
-  border-radius:999px;
-  margin-bottom:6px;
+  font-size:10.5px;
   font-weight:700;
-}
-.tag-urgent{background:rgba(220,38,38,.1);color:var(--danger);}
-.tag-patch{background:rgba(5,150,105,.1);color:var(--safe);}
-.tag-exclusive{background:rgba(217,119,6,.1);color:var(--warn);}
-.news-title{
-  font-size:14.5px;
-  font-weight:700;
-  line-height:1.4;
-}
-.news-summary{
-  font-size:13px;
+  padding:2px 7px;
+  border-radius:6px;
+  background:var(--border);
   color:var(--sub);
-  margin-top:4px;
-  line-height:1.5;
 }
-.chevron{
-  flex-shrink:0;
-  color:var(--sub);
-  transition:transform .2s ease;
-  font-size:18px;
-}
-.news-item.open .chevron{transform:rotate(90deg);}
-.news-body{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .25s ease;
-  padding:0 14px;
-}
-.news-item.open .news-body{
-  max-height:600px;
-  padding:0 14px 14px;
-}
-.why{
-  background:var(--bg);
-  border-radius:8px;
-  padding:10px 12px;
-  font-size:13px;
-  line-height:1.55;
-  margin-bottom:8px;
-}
-.why strong{
-  display:block;
-  margin-bottom:4px;
-  font-size:12px;
-  color:var(--accent);
-}
-.source-link{
-  font-size:12px;
-  color:var(--accent);
-  text-decoration:none;
-  display:inline-block;
-}
+.tag-urgent{background:var(--danger-bg);color:var(--danger);}
+.tag-warn{background:var(--warn-bg);color:var(--warn);}
+.tag-good{background:var(--good-bg);color:var(--good);}
+.tag-info{background:var(--info-bg);color:var(--info);}
+.news-title{font-size:14.5px;font-weight:700;line-height:1.4;padding-right:20px;}
+.news-summary{font-size:12.5px;color:var(--sub);margin-top:4px;line-height:1.5;padding-right:20px;}
+.chev{position:absolute;right:12px;top:14px;font-size:12px;color:var(--sub);transition:transform 0.2s ease;}
+.news-item.open .chev{transform:rotate(180deg);}
+.news-body{max-height:0;overflow:hidden;transition:max-height 0.25s ease;}
+.news-item.open .news-body{max-height:600px;}
+.news-why{font-size:12.5px;line-height:1.6;padding:0 14px 10px;color:var(--text);border-top:1px dashed var(--border);margin-top:2px;padding-top:8px;}
+.news-source{padding:0 14px 12px;}
+.news-source a{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;}
+
 .trend-summary{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px;
-  margin-bottom:14px;
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:12px;
 }
-.trend-summary-label{
-  font-size:12px;
-  color:var(--sub);
-  font-weight:700;
-  margin-bottom:8px;
-}
-.topic-tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
-.topic-tag{
-  font-size:12px;
-  background:var(--bg);
-  color:var(--text);
-  padding:4px 10px;
-  border-radius:999px;
-  border:1px solid var(--border);
-}
+.trend-summary-label{font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;}
+.topic-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.topic-tags .tag{background:var(--info-bg);color:var(--info);}
+
 .trend-card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:var(--radius);
+  border-radius:12px;
   padding:14px;
   margin-bottom:12px;
 }
-.trend-title{
-  font-size:14.5px;
-  font-weight:700;
-  margin-bottom:8px;
-  line-height:1.4;
-}
+.trend-title{font-size:14.5px;font-weight:700;margin-bottom:8px;line-height:1.4;}
 .trend-card .topic-tags{margin-bottom:8px;}
-.trend-text{
-  font-size:13px;
-  color:var(--text);
-  line-height:1.6;
-  margin-bottom:10px;
-}
-.source-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
+.trend-text{font-size:13px;line-height:1.6;color:var(--text);margin-bottom:10px;}
+.source-row{display:flex;gap:6px;flex-wrap:wrap;}
 .source-chip{
   font-size:11.5px;
-  color:var(--accent);
-  background:rgba(37,99,235,.08);
-  padding:4px 10px;
-  border-radius:999px;
+  padding:4px 9px;
+  border-radius:14px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--sub);
   text-decoration:none;
+  font-weight:600;
 }
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="swipe-hint">← 좌우로 스와이프해서 화면을 전환하세요 →</div>
-  <div class="header-row">
-    <h1 class="page-title">정보보안 뉴스 브리핑</h1>
-    <div class="calendar-picker">
-      <input type="date" id="datePicker" min="2026-08-08" max="2026-08-27" value="2026-08-27">
-      <span class="date-msg" id="dateMsg">해당 날짜의 리포트가 없습니다</span>
-    </div>
-  </div>
   <div class="nav-header">
-    <div class="screen-tabs">
-      <button class="tab active" data-index="0">① 오늘</button>
-      <button class="tab" data-index="1">② 30일 트렌드</button>
-      <button class="tab" data-index="2">③ 1년 트렌드</button>
+    <div class="header-row">
+      <h1 class="page-title">정보보안 뉴스 브리핑</h1>
+      <div class="calendar-picker">
+        <input type="date" id="datePicker" min="2026-08-08" max="2026-08-27" value="2026-08-27">
+        <span class="date-msg" id="dateMsg">해당 날짜의 리포트가 없습니다</span>
+      </div>
+    </div>
+    <div class="screen-tabs" id="screenTabs">
+      <button class="tab-btn active" data-idx="0" onclick="goToScreen(0)">① 오늘</button>
+      <button class="tab-btn" data-idx="1" onclick="goToScreen(1)">② 30일 트렌드</button>
+      <button class="tab-btn" data-idx="2" onclick="goToScreen(2)">③ 1년 트렌드</button>
     </div>
   </div>
+
+  <div class="swipe-hint">← 좌우로 스와이프하여 화면을 전환하세요 →</div>
 
   <div class="pager-wrap">
-    <button class="nav-arrow left" id="arrowLeft" aria-label="이전 화면">‹</button>
+    <button class="nav-arrow left" id="arrowLeft" aria-label="이전 화면" onclick="stepScreen(-1)">‹</button>
+
     <div class="pager" id="pager">
+      <!-- 화면 1: 오늘 -->
+      <section class="screen" id="screen0">
+        <div class="screen-label">일일 브리핑</div>
+        <div class="date">리포트 날짜: 2026-08-27</div>
 
-      <div class="screen" id="screen0">
-        <div class="screen-inner">
-          <div class="screen-label">일일 브리핑</div>
-          <div class="date">리포트 날짜: 2026-08-27</div>
-          <div class="status-banner has-news">오늘 새 소식 2건 확인 (국내 1 · 해외 1)</div>
+        <div class="status-banner urgent">오늘 새 소식 4건 (국내 2 · 해외 2) · 해외 Gitea 취약점은 실공격이 확인되어 즉시 패치 권고</div>
 
-          <div class="news-tabs">
-            <button class="news-tab-btn active" onclick="switchNewsTab('domestic', this)">국내</button>
-            <button class="news-tab-btn" onclick="switchNewsTab('global', this)">해외</button>
-          </div>
-
-          <div class="news-group" id="group-domestic">
-            <div class="news-item">
-              <div class="news-head" onclick="toggleItem(this)">
-                <div class="news-head-text">
-                  <div class="news-title">전 세계 랜섬웨어 공격, 8월도 역대 최다 경신…한국은 40건 집계</div>
-                  <div class="news-summary">랜섬웨어 추적사이트 집계 결과 올해 누적 공격 건수가 6582건으로 작년 동기(5113건) 대비 1000건 이상 늘었다. '킬린(Qilin)'이 920건으로 최다를 기록했고, 신흥 조직 '더젠틀맨'이 705건으로 뒤를 이었다.</div>
-                </div>
-                <span class="chevron">›</span>
-              </div>
-              <div class="news-body">
-                <div class="why">
-                  <strong>왜 중요한가</strong>
-                  KISA에 신고된 국내 랜섬웨어 침해사고는 올 상반기 145건으로 집계됐지만, 다크웹 유출사이트에 등록되지 않은 사례(교원그룹, 예스24 등)는 이 수치에서 빠져 있어 실제 피해 규모는 더 클 것으로 추정된다. 4월 이후 매달 역대 최다치를 갈아치우는 추세인 만큼 기업·기관의 랜섬웨어 대비책 재점검이 필요하다.
-                </div>
-                <a class="source-link" href="https://zdnet.co.kr/view/?no=20260826173249" target="_blank" rel="noopener">출처: ZDNet Korea (2026-08-26)</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="news-group" id="group-global" style="display:none;">
-            <div class="news-item">
-              <div class="news-head" onclick="toggleItem(this)">
-                <div class="news-head-text">
-                  <span class="tag tag-exclusive">신규 위협 공개</span>
-                  <div class="news-title">AI 음성봇으로 애플 지원팀 사칭…분실폰 잠금해제 노리는 PhaaS 등장</div>
-                  <div class="news-summary">'AnonyMousKIT'이라는 서비스형 피싱(PhaaS) 플랫폼이 분실·도난 애플 기기 소유자에게 AI 음성 에이전트로 전화를 걸어 기기 비밀번호·애플 계정 정보·2FA 코드까지 요구하는 정황이 보안업체 SOCRadar 조사로 드러났다.</div>
-                </div>
-                <span class="chevron">›</span>
-              </div>
-              <div class="news-body">
-                <div class="why">
-                  <strong>왜 중요한가</strong>
-                  이메일·SMS·왓츠앱·AI음성통화 등 5개 채널을 크레딧 과금제로 운영하는 상업화된 범죄 서비스 형태로, 애플은 비밀번호·잠금해제 코드·2FA 코드를 요구하는 연락을 절대 하지 않는다고 명시하고 있다. 사회공학 공격이 AI 음성합성으로 자동화·대량화되는 흐름을 보여주는 사례로, 개인 이용자의 보안 인식 제고가 필요하다.
-                </div>
-                <a class="source-link" href="https://thehackernews.com/2026/08/fake-apple-support-ai-calls-target.html" target="_blank" rel="noopener">출처: The Hacker News (2026-08-26)</a>
-              </div>
-            </div>
-          </div>
-
+        <div class="region-tabs">
+          <button class="region-btn active" data-region="domestic" onclick="switchRegion(this,'domestic')">국내</button>
+          <button class="region-btn" data-region="intl" onclick="switchRegion(this,'intl')">해외</button>
         </div>
-      </div>
 
-      <div class="screen" id="screen1">
-        <div class="screen-inner">
-          <div class="screen-label">최근 30일 트렌드</div>
-          <div class="date">기준일: 2026-08-27</div>
-
-          <div class="trend-summary">
-            <div class="trend-summary-label">핵심 키워드</div>
-            <div class="topic-tags">
-              <span class="topic-tag">Zimbra 실공격</span>
-              <span class="topic-tag">패치 튜즈데이</span>
-              <span class="topic-tag">CISA KEV 확대</span>
-              <span class="topic-tag">Entra ID CVSS 10.0</span>
-              <span class="topic-tag">국내 인증기관 해킹</span>
+        <div class="region-panel" data-region-panel="domestic">
+          <div class="news-item">
+            <button class="news-head" onclick="toggleItem(this)">
+              <div class="news-tags"><span class="tag tag-warn">주의</span></div>
+              <div class="news-title">북한 해커 '김수키', 한·일 겨냥 'AnyDesk' 은닉 침투</div>
+              <div class="news-summary">엔키화이트햇 분석 결과, 북한 연계 조직 김수키가 정상 원격제어 프로그램 AnyDesk를 은닉 설치해 아웃룩·썬더버드·지메일을 상시 탈취하는 캠페인을 한·일 기관 대상으로 벌인 것으로 확인됐다.</div>
+              <div class="chev">▾</div>
+            </button>
+            <div class="news-body">
+              <div class="news-why"><strong>왜 중요한지:</strong> UAC 우회와 AnyDesk 창·트레이 아이콘 은폐로 감염 사실을 알아채기 어렵고, 시스템을 복구하더라도 원격 접속 통로가 유지될 수 있다. 정책·행사 안내로 위장한 압축파일(LNK) 첨부를 여는 순간 감염되므로 출처가 불분명한 원드라이브 링크는 열지 않아야 한다.</div>
+              <div class="news-source"><a href="https://www.boannews.com/news/articleView.html?idxno=145444" target="_blank" rel="noopener">출처: 보안뉴스 (2026.08.26) →</a></div>
             </div>
           </div>
 
-          <div class="trend-card">
-            <div class="trend-title">Zimbra 협업 스위트 커맨드 인젝션, 패치 직후 광범위 실공격</div>
-            <div class="topic-tags"><span class="topic-tag">Zimbra</span><span class="topic-tag">CVE-2026-73570</span></div>
-            <div class="trend-text">Zimbra Collaboration Suite의 SNMP 알림 처리 과정 커맨드 인젝션 취약점(CVE-2026-73570, CVSS 8.9)이 패치 공개 직후부터 실제 공격에 악용되고 있다. 인증 없이 SMTP 요청만으로 임의 명령 실행이 가능해, 8월 24일 기준 전 세계 267개 서버가 이미 침해된 것으로 파악됐고 CISA는 연방기관에 같은 날짜까지 패치를 의무화했다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://thehackernews.com/2026/08/attackers-exploit-zimbra-snmp-flaw-for.html" target="_blank" rel="noopener">The Hacker News</a>
+          <div class="news-item">
+            <button class="news-head" onclick="toggleItem(this)">
+              <div class="news-tags"><span class="tag tag-info">정책변화</span></div>
+              <div class="news-title">개인정보위, '유출사고 대응 매뉴얼' 초안 공개 — 9월 11일 시행</div>
+              <div class="news-summary">개인정보위·KISA가 개정 개인정보보호법 시행(9/11)에 맞춰 '유출 가능성 통지' 의무를 신설한 대응 매뉴얼 초안을 내놓고, 9월 3일까지 의견을 수렴한다.</div>
+              <div class="chev">▾</div>
+            </button>
+            <div class="news-body">
+              <div class="news-why"><strong>왜 중요한지:</strong> 유출이 확정되지 않은 해킹 정황만으로도 인지 후 72시간 내 정보주체에게 선제 통지해야 하는 의무가 새로 생겨, 기업의 컴플라이언스 부담과 오탐 리스크가 커진다. 법정·징벌적 손해배상 규정도 함께 명시돼 사고 대응 프로세스 재정비가 필요하다.</div>
+              <div class="news-source"><a href="https://www.boannews.com/news/articleView.html?idxno=145468" target="_blank" rel="noopener">출처: 보안뉴스 (2026.08.26) →</a></div>
             </div>
           </div>
-
-          <div class="trend-card">
-            <div class="trend-title">MS 8월 정기패치 421건 수정…北 라자루스 제로데이 포함</div>
-            <div class="topic-tags"><span class="topic-tag">Patch Tuesday</span><span class="topic-tag">Lazarus</span></div>
-            <div class="trend-text">마이크로소프트가 8월 정기 업데이트로 421개 취약점을 수정했다. 이 중 Windows AFD.sys 드라이버 결함(CVE-2026-68820)은 북한 연계 해킹조직 라자루스가 실제 공격에 악용해 SYSTEM 권한을 탈취한 제로데이로 확인됐다. 구글도 실공격 중인 크롬 제로데이(CVE-2026-5281, WebGPU Dawn use-after-free)를 포함해 21개 취약점을 패치했다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://www.securityweek.com/august-2026-patch-tuesday-microsoft-fixes-421-cves-one-exploited-zero-day/" target="_blank" rel="noopener">SecurityWeek</a>
-              <a class="source-chip" href="https://thehackernews.com/2026/08/lazarus-exploits-windows-zero-day-to.html" target="_blank" rel="noopener">The Hacker News</a>
-            </div>
-          </div>
-
-          <div class="trend-card">
-            <div class="trend-title">CISA KEV 목록, 8월 한 달간 20건 이상 추가 등재</div>
-            <div class="topic-tags"><span class="topic-tag">CISA KEV</span><span class="topic-tag">실공격 확인</span></div>
-            <div class="trend-text">미국 CISA가 8월 한 달간 N-able N-central 인증우회, Cisco ASA/FTD, Windows WinSock 드라이버, Metabase SQL인젝션, TrueConf 서버, Windows IKE 확장기능, Zimbra 등 20건 이상의 취약점을 실공격 확인 목록(KEV)에 추가했다. 패치 공개 후 실공격까지 걸리는 시간이 갈수록 짧아지는 흐름이 이어지고 있다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://www.cisa.gov/news-events/alerts/2026/08/11/cisa-adds-three-known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA (8/11)</a>
-              <a class="source-chip" href="https://www.cisa.gov/news-events/alerts/2026/08/20/cisa-adds-two-known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA (8/20)</a>
-            </div>
-          </div>
-
-          <div class="trend-card">
-            <div class="trend-title">MS Entra ID 치명적 결함(CVSS 10.0), "실공격 아님"으로 정정</div>
-            <div class="topic-tags"><span class="topic-tag">Entra ID</span><span class="topic-tag">CVSS 10.0</span></div>
-            <div class="trend-text">마이크로소프트가 클라우드 ID 서비스 Entra ID의 역직렬화 취약점(CVE-2026-69836, CVSS 10.0)을 패치하며 처음엔 "실공격 확인됨"이라 밝혔으나, 언론 문의 이후 "실공격 사례 없음"으로 정정했다. 이용자 조치는 필요 없고 이미 완전히 완화됐다고 설명했지만, 최고 등급 취약점 공지가 번복된 과정 자체가 신뢰성 논란을 낳았다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://thehackernews.com/2026/08/microsoft-entra-id-flaw-cvss-100.html" target="_blank" rel="noopener">The Hacker News</a>
-            </div>
-          </div>
-
-          <div class="trend-card">
-            <div class="trend-title">국내 민간 인증기관 서버 해킹…언론·병원 등 정보 포함</div>
-            <div class="topic-tags"><span class="topic-tag">국내 침해사고</span><span class="topic-tag">개인정보 유출</span></div>
-            <div class="trend-text">8월 20일 국내 한 민간 인증기관의 서버가 해킹돼 언론사·병원 등 관련 기관 정보가 포함된 자료가 유출된 사실이 확인됐다. 경찰청 국가수사본부는 사건을 부산경찰청에 배당했으며, 침입 경로와 피해 규모, 공격 배후를 조사 중이다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://www.newsis.com/view/NISX20260820_0003756147" target="_blank" rel="noopener">뉴시스</a>
-            </div>
-          </div>
-
         </div>
-      </div>
 
-      <div class="screen" id="screen2">
-        <div class="screen-inner">
-          <div class="screen-label">최근 1년 트렌드</div>
-          <div class="date">기준일: 2026-08-27</div>
-
-          <div class="trend-summary">
-            <div class="trend-summary-label">핵심 키워드</div>
-            <div class="topic-tags">
-              <span class="topic-tag">대형 개인정보 유출 릴레이</span>
-              <span class="topic-tag">랜섬웨어 역대 최다</span>
-              <span class="topic-tag">AI 기반 공격 본격화</span>
-              <span class="topic-tag">개인정보보호법 개편</span>
+        <div class="region-panel" data-region-panel="intl" hidden>
+          <div class="news-item">
+            <button class="news-head" onclick="toggleItem(this)">
+              <div class="news-tags"><span class="tag tag-urgent">긴급</span><span class="tag tag-good">패치존재</span></div>
+              <div class="news-title">Gitea 코드 인젝션(CVE-2026-60004), 실공격 확인 · CISA KEV 등재</div>
+              <div class="news-summary">CVSS 9.8의 Gitea diffpatch API 코드 인젝션 취약점이 암호화폐 채굴형 악성코드 유포에 실제 악용된 것이 확인돼 CISA가 KEV 목록에 추가하고, 연방기관에 8월 28일까지 패치를 지시했다.</div>
+              <div class="chev">▾</div>
+            </button>
+            <div class="news-body">
+              <div class="news-why"><strong>왜 중요한지:</strong> Gitea는 기본 설정상 회원가입이 열려 있어 인증 없이도 계정을 만들어 공격할 수 있다. 1.17 이상 모든 버전이 영향을 받으며 1.27.1로 패치해야 한다. 자체 호스팅 Git 서버를 운영 중인 조직은 버전 확인과 패치를 최우선으로 처리해야 한다.</div>
+              <div class="news-source"><a href="https://thehackernews.com/2026/08/critical-gitea-rce-actively-exploited.html" target="_blank" rel="noopener">출처: The Hacker News (2026.08.26) →</a></div>
             </div>
           </div>
 
-          <div class="trend-card">
-            <div class="trend-title">국내 통신·플랫폼 대형 개인정보 유출 릴레이</div>
-            <div class="topic-tags"><span class="topic-tag">SKT</span><span class="topic-tag">쿠팡</span><span class="topic-tag">넷마블</span><span class="topic-tag">KT</span></div>
-            <div class="trend-text">지난 1년간 SK텔레콤(가입자 약 2324만 명 유심정보 유출), 쿠팡(고객 약 3370만 계정, 한국 역대 최대 이커머스 침해), 넷마블(약 3800만 명 게임 이용자 정보), GS리테일, KT, 롯데카드 등 국내 주요 통신·유통·게임사가 잇달아 대형 유출 사고를 겪었다. 2025년은 국내 개인정보 유출 신고 건수가 2020년대 들어 가장 많았던 해로 기록될 가능성이 크다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://nordvpn.com/ko/blog/data-breach-incidents-2025/" target="_blank" rel="noopener">NordVPN</a>
-              <a class="source-chip" href="https://www.genians.co.kr/blog/data_leak" target="_blank" rel="noopener">Genians</a>
+          <div class="news-item">
+            <button class="news-head" onclick="toggleItem(this)">
+              <div class="news-tags"><span class="tag tag-warn">주의</span></div>
+              <div class="news-title">AI 무장 중국계 해커 'UAT-10147', 17만 개 서버 겨냥 공습</div>
+              <div class="news-summary">중국계 조직 UAT-10147이 PentestGPT·DeepAudit 등 AI 도구로 취약점 정찰부터 공격 검증까지 자동화하고, 윈도우·리눅스 겸용 백도어 '스펙터'로 주요 EDR의 감시 기능을 무력화하는 대규모 캠페인을 벌였다.</div>
+              <div class="chev">▾</div>
+            </button>
+            <div class="news-body">
+              <div class="news-why"><strong>왜 중요한지:</strong> 공격자 서버에서 미국·인도·영국·독일 등 17만 개 웹서버 URL 목록이 발견돼 대규모 공격이 기획됐음을 시사한다. 정찰-개발-EDR 무력화 전 과정에 AI가 결합되면서 기존 시그니처 기반 탐지 체계의 한계가 드러나고 있다.</div>
+              <div class="news-source"><a href="https://www.boannews.com/news/articleView.html?idxno=145407" target="_blank" rel="noopener">출처: 보안뉴스 (2026.08.25) →</a></div>
             </div>
           </div>
-
-          <div class="trend-card">
-            <div class="trend-title">랜섬웨어 공격, 4월 이후 매달 역대 최다 경신</div>
-            <div class="topic-tags"><span class="topic-tag">Qilin</span><span class="topic-tag">더젠틀맨</span><span class="topic-tag">Akira</span></div>
-            <div class="trend-text">전 세계 랜섬웨어 공격 건수가 올 4월 월 기준 역대 최대치(3199건)를 돌파한 뒤 8월까지 매달 최다 기록을 경신하고 있다. 러시아계 조직 '킬린'이 록빗을 넘어서는 누적 공격 건수로 사상 최악의 랜섬웨어 조직으로 떠올랐으며, 신흥 조직 '더젠틀맨'도 올해 들어 급격히 세를 불렸다. 국내에서도 자산운용사·제조업체 등이 피해를 입었다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://zdnet.co.kr/view/?no=20260826173249" target="_blank" rel="noopener">ZDNet Korea</a>
-            </div>
-          </div>
-
-          <div class="trend-card">
-            <div class="trend-title">AI가 방어 도구를 넘어 공격 수단으로 본격 전환</div>
-            <div class="topic-tags"><span class="topic-tag">AI 자동화 공격</span><span class="topic-tag">딥페이크 피싱</span></div>
-            <div class="trend-text">지난 1년 사이 AI 기반 공격이 위협 순위 최상단(63.7%)으로 올라섰다. 자율 AI 도구가 사람 개입 없이 공격의 상당 부분을 수행한 사례가 보고됐고, 딥페이크 음성·영상을 활용한 피싱이 실시간 통화·화상회의까지 확대됐다. 최근에는 AI 음성 에이전트가 분실폰 소유자에게 전화를 걸어 잠금해제 정보를 빼내는 상업화된 서비스형 피싱까지 등장했다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://m.boannews.com/html/detail.html?tab_type=1&idx=141687" target="_blank" rel="noopener">보안뉴스</a>
-              <a class="source-chip" href="https://www.samsungsds.com/kr/insights/cybersecurity-threats-and-response-2026.html" target="_blank" rel="noopener">삼성SDS 인사이트</a>
-            </div>
-          </div>
-
-          <div class="trend-card">
-            <div class="trend-title">개인정보보호법·정보통신망법 전면 개편 추진</div>
-            <div class="topic-tags"><span class="topic-tag">CISO 격상</span><span class="topic-tag">과징금 강화</span><span class="topic-tag">ISMS 개편</span></div>
-            <div class="trend-text">잇단 대형 유출 사고를 계기로 정보통신망법 개정안이 국회에서 통합 발의돼 CISO의 임원급 격상과 정보보호위원회 설치 의무화, 해킹 의심 정황만으로도 가능한 정부 직권조사 신설, 반복 침해사고에 매출액 3% 과징금 부과 등을 담았다. 개인정보 보호법 개정안도 2026년 3월 공포돼 9월 11일 시행을 앞두고 있으며, 서면 중심이던 ISMS 인증 방식도 실제 운영 상태를 지속 검증하는 방식으로 전면 개편될 예정이다.</div>
-            <div class="source-row">
-              <a class="source-chip" href="https://www.lawtimes.co.kr/news/articleView.html?idxno=218033" target="_blank" rel="noopener">법률신문</a>
-              <a class="source-chip" href="https://www.lawtimes.co.kr/news/articleView.html?idxno=222032" target="_blank" rel="noopener">법률신문(ISMS)</a>
-            </div>
-          </div>
-
         </div>
-      </div>
+      </section>
 
+      <!-- 화면 2: 30일 트렌드 -->
+      <section class="screen" id="screen1">
+        <div class="screen-label">최근 30일 트렌드</div>
+        <div class="date">기준일: 2026-08-27</div>
+
+        <div class="trend-summary">
+          <div class="trend-summary-label">핵심 키워드</div>
+          <div class="topic-tags">
+            <span class="tag">#개인정보과징금</span>
+            <span class="tag">#랜섬웨어역대최다</span>
+            <span class="tag">#8월패치화요일</span>
+            <span class="tag">#AI무장해킹</span>
+          </div>
+        </div>
+
+        <div class="trend-card">
+          <div class="trend-title">국내 개인정보 유출 제재, 역대급 릴레이 이어져</div>
+          <div class="topic-tags"><span class="tag">#과징금</span><span class="tag">#KT</span><span class="tag">#SKT</span></div>
+          <div class="trend-text">개인정보위가 지난달 29일 KT에 펨토셀 해킹 책임을 물어 539억7900만원의 과징금을 부과했다. 지난해 SK텔레콤에 부과된 역대 최대 과징금(1347억9100만원)에는 못 미치지만, 유출 규모·정보 유형 차이를 반영한 두 번째로 큰 제재였다. 이달 26일에는 9월 11일 시행되는 개정법에 맞춰 '유출 가능성 통지' 의무를 신설한 대응 매뉴얼 초안이 공개돼, 기업의 선제 고지 부담이 한층 커졌다.</div>
+          <div class="source-row">
+            <a class="source-chip" href="https://www.fnnews.com/news/202607301446307691" target="_blank" rel="noopener">파이낸셜뉴스 ↗</a>
+            <a class="source-chip" href="https://www.boannews.com/news/articleView.html?idxno=145468" target="_blank" rel="noopener">보안뉴스 ↗</a>
+          </div>
+        </div>
+
+        <div class="trend-card">
+          <div class="trend-title">랜섬웨어 공격, 4월부터 매달 역대 최다 경신</div>
+          <div class="topic-tags"><span class="tag">#랜섬웨어</span><span class="tag">#Qilin</span><span class="tag">#다크웹유출</span></div>
+          <div class="trend-text">다크웹 유출사이트 집계 기준 올해 전 세계 랜섬웨어 공격은 8월 26일 기준 6582건으로, 4월 이후 매달 역대 최고치를 갈아치우고 있다. 킬린(Qilin)은 누적 920건으로 과거 최대 조직이었던 록빗을 넘어서며 사상 최악의 단일 조직으로 떠올랐고, 신흥 조직 '더젠틀맨'도 급성장했다. 국내는 다크웹 공식 집계상 40건이지만 KISA 신고 기준 상반기 랜섬웨어 신고는 145건으로 전년 대비 76.8% 늘었다.</div>
+          <div class="source-row">
+            <a class="source-chip" href="https://zdnet.co.kr/view/?no=20260826173249" target="_blank" rel="noopener">ZDNet Korea ↗</a>
+          </div>
+        </div>
+
+        <div class="trend-card">
+          <div class="trend-title">Windows·SharePoint·Gitea, 8월 내내 이어진 긴급 패치</div>
+          <div class="topic-tags"><span class="tag">#제로데이</span><span class="tag">#패치화요일</span><span class="tag">#Gitea</span></div>
+          <div class="trend-text">마이크로소프트는 8월 정기 패치에서 421개 취약점을 수정했는데, 라자루스(Lazarus)가 위장 채용제안 캠페인으로 두 달간 악용해 온 윈도우 AFD.sys 권한상승 취약점(CVE-2026-68820)이 포함돼 있었다. 하순에는 오픈소스 Git 플랫폼 Gitea의 코드 인젝션 취약점(CVSS 9.8)이 실공격에 악용돼 CISA KEV에 추가되는 등, 한 달 내내 긴급 패치 권고가 이어졌다.</div>
+          <div class="source-row">
+            <a class="source-chip" href="https://thehackernews.com/2026/08/lazarus-exploits-windows-zero-day-to.html" target="_blank" rel="noopener">The Hacker News ↗</a>
+            <a class="source-chip" href="https://thehackernews.com/2026/08/critical-gitea-rce-actively-exploited.html" target="_blank" rel="noopener">The Hacker News ↗</a>
+          </div>
+        </div>
+
+        <div class="trend-card">
+          <div class="trend-title">AI로 무장한 해킹조직 등장 — 정찰부터 공격까지 자동화</div>
+          <div class="topic-tags"><span class="tag">#AI해킹</span><span class="tag">#에이전틱위협</span><span class="tag">#UAT-10147</span></div>
+          <div class="trend-text">중국계 조직 UAT-10147이 PentestGPT 등 AI 도구로 취약점 정찰과 공격 검증을 자동화하고 EDR을 무력화하는 크로스플랫폼 백도어를 유포한 사례가 알려지며, 해킹의 '대량 자동화' 단계 진입이 이달 보안업계의 화두로 떠올랐다. 국가 배후 해킹조직들도 AI 기반 공격 도구를 실전에 투입하는 사례가 늘고 있다.</div>
+          <div class="source-row">
+            <a class="source-chip" href="https://www.boannews.com/news/articleView.html?idxno=145407" target="_blank" rel="noopener">보안뉴스 ↗</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 화면 3: 1년 트렌드 -->
+      <section class="screen" id="screen2">
+        <div class="screen-label">최근 1년 트렌드</div>
+        <div class="date">기준일: 2026-08-27</div>
+
+        <div class="trend-summary">
+          <div class="trend-summary-label">핵심 키워드</div>
+          <div class="topic-tags">
+            <span class="tag">#통신사유출</span>
+            <span class="tag">#역대최대과징금</span>
+            <span class="tag">#랜섬웨어확산</span>
+            <span class="tag">#AI무기화</span>
+            <span class="tag">#공공기관보안공백</span>
+          </div>
+        </div>
+
+        <div class="trend-card">
+          <div class="trend-title">통신 3사 개인정보 유출 사태와 역대 최대 과징금</div>
+          <div class="topic-tags"><span class="tag">#SKT유심유출</span><span class="tag">#역대최대과징금</span></div>
+          <div class="trend-text">2025년 4월 드러난 SK텔레콤 유심정보 유출(약 2300만여 명)은 2021년부터 내부망에 잠입한 해커가 장기간 활동한 결과로 밝혀졌고, 그해 8월 개인정보위는 역대 최대인 1347억9100만원의 과징금을 부과했다. 2026년 7월에는 펨토셀 해킹으로 정보가 유출된 KT에도 539억7900만원의 과징금이 부과되며, 통신사 보안 부실에 대한 정부의 강경한 제재 기조가 1년 넘게 이어지고 있다.</div>
+          <div class="source-row">
+            <a class="source-chip" href="https://www.fnnews.com/news/202607301446307691" target="_blank" rel="noopener">파이낸셜뉴스 ↗</a>
+          </div>
+        </div>
+
+        <div class="trend-card">
+          <div class="trend-title">랜섬웨어, 사상 최대 규모로 확산 — 신흥 조직 난립</div>
+          <div class="topic-tags"><span class="tag">#랜섬웨어확산</span><span class="tag">#Qilin</span><span class="tag">#더젠틀맨</span></div>
+          <div class="trend-text">지난 1년간 전 세계 랜섬웨어 공격은 매달 역대 최고치를 경신하며 확산됐다. 과거 최대 조직이었던 록빗의 공백을 메운 킬린(Qilin)이 사상 최악의 단일 조직으로 부상했고, 메두사·더젠틀맨 등 신흥 조직도 빠르게 세력을 넓혔다. 국내에서도 KISA 신고 기준 상반기 랜섬웨어 신고가 전년 대비 76.8% 늘어난 145건을 기록했다.</div>
+          <div class="source-row">
+            <a class="source-chip" href="https://zdnet.co.kr/view/?no=20260826173249" target="_blank" rel="noopener">ZDNet Korea ↗</a>
+          </div>
+        </div>
+
+        <div class="trend-card">
+          <div class="trend-title">AI가 무기가 된 해킹 — 공격과 방어 모두 자동화</div>
+          <div class="topic-tags"><span class="tag">#AI해킹</span><span class="tag">#프롬프트인젝션</span><span class="tag">#에이전틱보안</span></div>
+          <div class="trend-text">지난 1년 사이 공격자들은 정찰·악성코드 개발·탐지 회피 전 과정에 생성형 AI를 결합한 공격을 실전에 배치하기 시작했다. 프롬프트 인젝션 공격은 전년 대비 340% 급증했고, 에이전트형 AI 시스템에 대한 공격 성공률이 84%에 달한다는 조사 결과도 나왔다. 이에 대응해 EU는 AI Office의 전면 집행권을 발동했고, 국내 개인정보위도 AI 개발용 개인정보 활용 특례와 유출 통지 강화를 담은 법 개정을 함께 추진했다.</div>
+          <div class="source-row">
+            <a class="source-chip" href="https://www.helpnetsecurity.com/2026/06/11/owasp-prompt-injection-ai-security-failures/" target="_blank" rel="noopener">Help Net Security ↗</a>
+          </div>
+        </div>
+
+        <div class="trend-card">
+          <div class="trend-title">공공·교육기관 연쇄 유출 — 관리 사각지대 노출</div>
+          <div class="topic-tags"><span class="tag">#공공기관유출</span><span class="tag">#대학해킹</span><span class="tag">#전담인력부족</span></div>
+          <div class="trend-text">서울시 공유자전거 '따릉이'(450만명), 서강대(18만건) 등 공공·교육기관을 겨냥한 유출 사고가 잇따르며 관리 부실이 도드라졌다. 전수조사 결과 공공기관 개인정보 담당 인력은 기관당 평균 0.7명에 불과한 것으로 나타났고, 개인정보위는 11년 만에 중앙부처 전담 인력을 대폭 확충하는 조치를 8월에 내놓았다.</div>
+          <div class="source-row">
+            <a class="source-chip" href="https://www.boannews.com/news/articleView.html?idxno=145425" target="_blank" rel="noopener">보안뉴스 ↗</a>
+          </div>
+        </div>
+      </section>
     </div>
-    <button class="nav-arrow right" id="arrowRight" aria-label="다음 화면">›</button>
+
+    <button class="nav-arrow right" id="arrowRight" aria-label="다음 화면" onclick="stepScreen(1)">›</button>
   </div>
 
-  <div class="dots">
-    <span class="dot active" data-index="0"></span>
-    <span class="dot" data-index="1"></span>
-    <span class="dot" data-index="2"></span>
+  <div class="dots" id="dots">
+    <span class="dot active" data-idx="0" onclick="goToScreen(0)"></span>
+    <span class="dot" data-idx="1" onclick="goToScreen(1)"></span>
+    <span class="dot" data-idx="2" onclick="goToScreen(2)"></span>
   </div>
 </div>
 
 <script>
 var pager = document.getElementById('pager');
-var screens = document.querySelectorAll('.screen');
-var dots = document.querySelectorAll('.dot');
-var tabs = document.querySelectorAll('.tab');
+var screens = Array.prototype.slice.call(document.querySelectorAll('.screen'));
+var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+var dots = Array.prototype.slice.call(document.querySelectorAll('.dot'));
 var arrowLeft = document.getElementById('arrowLeft');
 var arrowRight = document.getElementById('arrowRight');
-var currentIndex = 0;
-
-function goToScreen(i){
-  if(i < 0) i = 0;
-  if(i > screens.length - 1) i = screens.length - 1;
-  pager.scrollTo({left: i * pager.clientWidth, behavior:'smooth'});
-}
+var currentIdx = 0;
+var scrollTimer = null;
 
 function updatePagerHeight(){
-  var active = screens[currentIndex];
-  if(active){
-    pager.style.height = active.scrollHeight + 'px';
+  var idx = currentIdx;
+  if(screens[idx]){
+    pager.style.height = screens[idx].scrollHeight + 'px';
   }
 }
 
 function syncIndicators(){
-  var idx = Math.round(pager.scrollLeft / pager.clientWidth);
+  var w = pager.clientWidth || 1;
+  var idx = Math.round(pager.scrollLeft / w);
   if(idx < 0) idx = 0;
   if(idx > screens.length - 1) idx = screens.length - 1;
-  currentIndex = idx;
-  dots.forEach(function(d, i){ d.classList.toggle('active', i === idx); });
-  tabs.forEach(function(t, i){ t.classList.toggle('active', i === idx); });
+  currentIdx = idx;
+  tabs.forEach(function(t){ t.classList.toggle('active', parseInt(t.getAttribute('data-idx'),10) === idx); });
+  dots.forEach(function(d){ d.classList.toggle('active', parseInt(d.getAttribute('data-idx'),10) === idx); });
   arrowLeft.disabled = (idx === 0);
   arrowRight.disabled = (idx === screens.length - 1);
   updatePagerHeight();
 }
 
-var scrollTimeout;
+function goToScreen(idx){
+  pager.scrollTo({left: idx * pager.clientWidth, behavior:'smooth'});
+  currentIdx = idx;
+  setTimeout(syncIndicators, 260);
+}
+
+function stepScreen(delta){
+  var next = currentIdx + delta;
+  if(next < 0 || next > screens.length - 1) return;
+  goToScreen(next);
+}
+
 pager.addEventListener('scroll', function(){
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(syncIndicators, 60);
-});
-
-dots.forEach(function(d){
-  d.addEventListener('click', function(){ goToScreen(parseInt(d.dataset.index)); });
-});
-tabs.forEach(function(t){
-  t.addEventListener('click', function(){ goToScreen(parseInt(t.dataset.index)); });
-});
-arrowLeft.addEventListener('click', function(){ goToScreen(currentIndex - 1); });
-arrowRight.addEventListener('click', function(){ goToScreen(currentIndex + 1); });
-
-document.addEventListener('keydown', function(e){
-  if(e.key === 'ArrowLeft') goToScreen(currentIndex - 1);
-  if(e.key === 'ArrowRight') goToScreen(currentIndex + 1);
+  if(scrollTimer) clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(syncIndicators, 80);
 });
 
 window.addEventListener('resize', function(){
-  goToScreen(currentIndex);
   updatePagerHeight();
 });
 
-function toggleItem(el){
-  var item = el.closest('.news-item');
+document.addEventListener('keydown', function(e){
+  if(e.key === 'ArrowLeft'){ stepScreen(-1); }
+  else if(e.key === 'ArrowRight'){ stepScreen(1); }
+});
+
+function toggleItem(btn){
+  var item = btn.closest('.news-item');
   item.classList.toggle('open');
   setTimeout(updatePagerHeight, 260);
 }
 
-function switchNewsTab(scope, btn){
-  document.querySelectorAll('.news-tab-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  document.querySelectorAll('.news-group').forEach(function(g){ g.style.display = 'none'; });
-  document.getElementById('group-' + scope).style.display = 'block';
-  setTimeout(updatePagerHeight, 0);
+function switchRegion(btn, region){
+  var wrap = btn.closest('.screen');
+  var buttons = wrap.querySelectorAll('.region-btn');
+  buttons.forEach(function(b){ b.classList.toggle('active', b === btn); });
+  var panels = wrap.querySelectorAll('.region-panel');
+  panels.forEach(function(p){
+    p.hidden = (p.getAttribute('data-region-panel') !== region);
+  });
+  setTimeout(updatePagerHeight, 260);
 }
 
 window.addEventListener('load', function(){
-  updatePagerHeight();
   syncIndicators();
 });
 
-var datePicker = document.getElementById('datePicker');
-var dateMsg = document.getElementById('dateMsg');
-var lastValidDate = datePicker.value;
+// 날짜 피커
+(function(){
+  var picker = document.getElementById('datePicker');
+  var msg = document.getElementById('dateMsg');
+  if(!picker) return;
+  var lastValid = picker.value;
+  var msgTimer = null;
 
-datePicker.addEventListener('change', function(){
-  var val = datePicker.value;
-  var isIndex = location.pathname.indexOf('/archive/') === -1;
-  var target = isIndex ? ('archive/' + val + '.html') : (val + '.html');
-  fetch(target, {method:'HEAD'}).then(function(res){
-    if(res.ok){
-      location.href = target;
-    } else {
-      datePicker.value = lastValidDate;
-      dateMsg.classList.add('show');
-      setTimeout(function(){ dateMsg.classList.remove('show'); }, 2500);
+  function showMsg(){
+    msg.classList.add('show');
+    if(msgTimer) clearTimeout(msgTimer);
+    msgTimer = setTimeout(function(){ msg.classList.remove('show'); }, 2500);
+  }
+
+  function computeTarget(dateStr){
+    var path = location.pathname;
+    if(path.indexOf('/archive/') !== -1){
+      return dateStr + '.html';
     }
-  }).catch(function(){
-    location.href = target;
+    return 'archive/' + dateStr + '.html';
+  }
+
+  picker.addEventListener('change', function(){
+    var val = picker.value;
+    var target = computeTarget(val);
+    fetch(target, {method:'HEAD'}).then(function(res){
+      if(res.ok){
+        location.href = target;
+      } else {
+        picker.value = lastValid;
+        showMsg();
+      }
+    }).catch(function(){
+      // 네트워크 오류 시 이동 시도
+      location.href = target;
+    });
   });
-});
+})();
 </script>
+
 <script>(function(){var d=document.getElementById('datePicker');if(d){var t=new Date();var m=('0'+(t.getMonth()+1)).slice(-2);var day=('0'+t.getDate()).slice(-2);d.max=t.getFullYear()+'-'+m+'-'+day;}})();</script>
 </body>
 </html>
